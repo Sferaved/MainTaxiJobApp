@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text"
+        android:textSize="20dp"
+        android:text="Політика конфіденційності"
+        android:textStyle="bold"
+        android:gravity="center" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text"
+        android:layout_margin="10dp"
+        android:gravity="left"
+        android:text="Застосовується Загальний регламент захисту персональних даних (GDPR) Європейського союзу." />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text"
+        android:layout_margin="10dp"
+        android:gravity="left"
+        android:text="Деякі частини додатка, які пропонують скачування інформації або послуг, можуть вимагати введення користувачем особистих даних для отримання цих послуг або доступу до особливих розділів або реєстрації як користувача із захистом паролем." />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text"
+        android:layout_margin="10dp"
+        android:gravity="left"
+        android:text="Виконуючи ці дії користувач погоджується з Правиламі конфедійціності цього додатка та усвідомлює з якою метою збираються дані, а також те, чи введення інформації є добровільним або обовязковим для користування відповідною послугою." />
+
+</LinearLayout>

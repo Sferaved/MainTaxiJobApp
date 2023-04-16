@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Працевлаштування</string>
+    <string name="main">На головну</string>
+    <string name="about">Про додаток</string>
+    <string name="author">Автор</string>
+    <string name="confidantional">Захист даних</string>
+    <string name="contract">Умови</string>
+    <string name="begin">Почати</string>
+    <string name="selected">Обрано:</string>
+    <string name="send_admin_mail">Надіслати адміністратору</string>
+    <string name="first_name">Ім\'я</string>
+    <string name="second_name">Прізвище</string>
+    <string name="email">Email</string>
+    <string name="phone_number">Телефон</string>
+
+
+    <string name="compose_email">Compose Email</string>
+    <string name="main_app_name">Таксі Лайт Юа</string>
+    <string name="second_app_name">Робота в таксі</string>
+    <string name="contact">Контакт</string>
+    <string name="auto">авто</string>
+    <string name="model_auto">Модель</string>
+    <string name="type_auto">Тип кузова</string>
+    <string name="color_auto">Колор</string>
+    <string name="yers_auto">Рік випуску</string>
+    <string name="number_auto">Держ.номер</string>
+    <string name="contact_info">Контакт</string>
+    <string name="auto_info">Авто</string>
+    <string name="services_info">Служби</string>
+    <string name="save">Зберегти</string>
+</resources>

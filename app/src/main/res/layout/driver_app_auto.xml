@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TableLayout
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Марка"
+                android:textColor="@color/text" />
+            <Spinner
+                android:id="@+id/list_auto"
+                android:minWidth="278dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:background="@color/text"
+                android:gravity="clip_horizontal" />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:layout_marginTop="5dp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/model_auto"
+                android:textColor="@color/text"/>
+
+            <EditText
+                android:layout_marginLeft="5dp"
+                android:layout_width="282dp"
+                android:backgroundTint="@color/colorAccent"
+                android:inputType="text"
+                android:text=""
+                android:textColor="@color/text"
+                android:id="@+id/model_auto"/>
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/type_auto"
+                android:textColor="@color/text" />
+            <Spinner
+                android:id="@+id/type_auto"
+                android:minWidth="278dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:background="@color/text"
+                android:gravity="clip_horizontal" />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:layout_marginTop="5dp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/color_auto"
+                android:textColor="@color/text"/>
+
+            <EditText
+                android:layout_marginLeft="5dp"
+                android:layout_width="282dp"
+                android:backgroundTint="@color/colorAccent"
+                android:inputType="text"
+                android:text=""
+                android:textColor="@color/text"
+                android:id="@+id/color_auto"/>
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:layout_marginTop="5dp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/yers_auto"
+                android:textColor="@color/text"/>
+
+            <EditText
+                android:layout_marginLeft="5dp"
+                android:layout_width="282dp"
+                android:backgroundTint="@color/colorAccent"
+                android:inputType="number"
+                android:text=""
+                android:textColor="@color/text"
+                android:id="@+id/years_auto"/>
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:layout_marginTop="5dp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/number_auto"
+                android:textColor="@color/text"/>
+
+            <EditText
+                android:layout_marginLeft="5dp"
+                android:layout_width="282dp"
+                android:backgroundTint="@color/colorAccent"
+                android:inputType="text"
+                android:text=""
+                android:textColor="@color/text"
+                android:id="@+id/number_auto"/>
+        </TableRow>
+
+    </TableLayout>
+
+</LinearLayout>
