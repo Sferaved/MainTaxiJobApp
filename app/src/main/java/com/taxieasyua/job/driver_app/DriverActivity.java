@@ -18,6 +18,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,16 +37,15 @@ import java.util.List;
 public class DriverActivity extends AppCompatActivity implements Postman, ActionBar.TabListener, Dialog.OnClickListener  {
     private Driver driver;
     private Intent intent;
-    private List<String> infoList = new ArrayList<>();
-    private List<String> autoList = new ArrayList<>();
-    private List<String> servicesList = new ArrayList<>();
+    private List<String> infoList;
+    private List<String> autoList;
+    private List<String> servicesList;
     private boolean valid;
     private String addressAdmin = "taxi.easy.ua@gmail.com";
     private final int NOTIFICATION_ID = 127;
     private final String TAG = "TAG";
     private EmailValidator emailValidator;
     private PhoneValidator phoneValidator;
-    private TableLayout tableLayoutAuto;
 
     private InfoFragment infoFragment;
     private AutoFragment autoFragment;
@@ -65,6 +65,12 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
         infoFragment = new InfoFragment();
         autoFragment = new AutoFragment();
         servicesFragment = new ServicesFragment();
+
+        infoList = initArray(5);
+        autoList = initArray(6);
+        servicesList = new ArrayList<>();
+
+        infoComplete = true;
 
         fragmentManager = getFragmentManager();
 
@@ -91,6 +97,14 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
         emailValidator = new EmailValidator();
         phoneValidator = new PhoneValidator();
 
+    }
+
+    private ArrayList<String> initArray (int length) {
+        ArrayList<String> arrayList = new ArrayList<>();
+        for (int i = 0; i < length; i++) {
+            arrayList.add("");
+        }
+        return arrayList;
     }
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
@@ -176,7 +190,6 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
 
     protected void sendEmail() {
         pauseFragment();
-
         infoComplete = true;
         for (int i = 0; i < infoList.size(); i++) {
             if (infoList.get(i).equals("")) {
@@ -187,10 +200,9 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
         for (int i = 0; i < autoList.size(); i++) {
             if (autoList.get(i).equals("")) {
                 infoComplete = false;
-                break;
-            }
+                break;}
         }
-        if (!infoComplete) {
+        if (infoComplete == false) {
             Toast.makeText(this, "Вибачьте. Вказано не всі дані. Відправка заявки неможлива.", Toast.LENGTH_SHORT).show();
         } else if (isValid(infoList)) {
 
