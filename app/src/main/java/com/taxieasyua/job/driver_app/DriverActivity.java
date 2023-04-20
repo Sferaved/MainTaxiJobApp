@@ -183,6 +183,9 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
             case R.id.send_message:
                 sendEmail();
                 break;
+            case R.id.exit:
+                this.finish();
+                break;
         }
 
         return false;
@@ -227,6 +230,9 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
 
                 StringBuilder stringBuilder = new StringBuilder();
                 for (String value: servicesList) {
+                    if (value.equals("Терминал")) {
+                        addressAdmin = "takci2012@gmail.com";
+                    }
                     stringBuilder.append(value).append("\n");
                 }
                 String subject = "Лист від водія-кандидата";
@@ -257,6 +263,19 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
     protected void onRestart() {
         super.onRestart();
         showNotification();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(this, "До побачення. Чекаємо наступного разу.", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        Toast.makeText(this, "Вітаємо. Заповніть будь-ласка всі поля для надсилання заявки", Toast.LENGTH_SHORT).show();
+
     }
 
     public void showNotification() {

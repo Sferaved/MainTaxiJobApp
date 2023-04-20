@@ -10,8 +10,8 @@ android {
         applicationId "com.taxieasyua.job"
         minSdk 16
         targetSdk 33
-        versionCode 2
-        versionName '2'
+        versionCode 3
+        versionName '2.1 (design fix)'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

@@ -67,6 +67,7 @@ public class ServicesFragment extends Fragment {
     }
     private String[] services () {
         return new String[]{
+                "Терминал",
                 "Таксі Лайт Юа",
                 "UBER",
                 "UKLON",

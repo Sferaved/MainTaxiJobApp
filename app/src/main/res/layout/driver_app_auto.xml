@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
 
     <TableLayout
         android:layout_marginTop="10dp"
@@ -14,28 +15,35 @@
 
         <TableRow>
             <TextView
+                android:layout_marginTop="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="20sp"
                 android:text="Марка"
                 android:textColor="@color/text" />
+
             <Spinner
                 android:id="@+id/list_auto"
-                android:minWidth="278dp"
-                android:layout_height="wrap_content"
+                android:layout_width="282dp"
+                android:layout_height="33dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="5dp"
                 android:background="@color/text"
-                android:gravity="clip_horizontal" />
+                android:gravity="clip_horizontal"
+                android:minWidth="282sp"
+                android:minHeight="20sp" />
         </TableRow>
         <TableRow>
             <TextView
                 android:layout_marginTop="5dp"
+                android:textSize="20sp"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:text="@string/model_auto"
                 android:textColor="@color/text"/>
 
             <EditText
+                android:layout_marginTop="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_width="282dp"
                 android:backgroundTint="@color/colorAccent"
@@ -46,22 +54,26 @@
         </TableRow>
         <TableRow>
             <TextView
+                android:layout_marginTop="5dp"
+                android:textSize="20sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/type_auto"
                 android:textColor="@color/text" />
             <Spinner
                 android:id="@+id/type_auto"
-                android:minWidth="278dp"
+                android:minWidth="282dp"
+                android:minHeight="33sp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="5dp"
                 android:background="@color/text"
-                android:gravity="clip_horizontal" />
+                android:gravity="clip_horizontal"  />
         </TableRow>
         <TableRow>
             <TextView
                 android:layout_marginTop="5dp"
+                android:textSize="20sp"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:text="@string/color_auto"
@@ -69,6 +81,7 @@
 
             <EditText
                 android:layout_marginLeft="5dp"
+                android:textSize="20sp"
                 android:layout_width="282dp"
                 android:backgroundTint="@color/colorAccent"
                 android:inputType="text"
@@ -79,6 +92,7 @@
         <TableRow>
             <TextView
                 android:layout_marginTop="5dp"
+                android:textSize="20sp"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:text="@string/yers_auto"
@@ -86,6 +100,7 @@
 
             <EditText
                 android:layout_marginLeft="5dp"
+                android:textSize="20sp"
                 android:layout_width="282dp"
                 android:backgroundTint="@color/colorAccent"
                 android:inputType="number"
@@ -96,6 +111,7 @@
         <TableRow>
             <TextView
                 android:layout_marginTop="5dp"
+                android:textSize="20sp"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:text="@string/number_auto"
@@ -103,6 +119,7 @@
 
             <EditText
                 android:layout_marginLeft="5dp"
+                android:textSize="20sp"
                 android:layout_width="282dp"
                 android:backgroundTint="@color/colorAccent"
                 android:inputType="text"
