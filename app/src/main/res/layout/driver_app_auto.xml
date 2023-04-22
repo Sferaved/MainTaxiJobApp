@@ -6,16 +6,16 @@
     android:background="@color/background">
 
     <TableLayout
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginTop="10sp"
+        android:layout_marginLeft="10sp"
+        android:layout_marginRight="10sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center">
 
         <TableRow>
             <TextView
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="5sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
@@ -24,10 +24,10 @@
 
             <Spinner
                 android:id="@+id/list_auto"
-                android:layout_width="282dp"
-                android:layout_height="33dp"
+                android:layout_width="282sp"
+                android:layout_height="33sp"
                 android:layout_gravity="center"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="5sp"
                 android:background="@color/text"
                 android:gravity="clip_horizontal"
                 android:minWidth="282sp"
@@ -35,7 +35,7 @@
         </TableRow>
         <TableRow>
             <TextView
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="5sp"
                 android:textSize="20sp"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
@@ -43,9 +43,9 @@
                 android:textColor="@color/text"/>
 
             <EditText
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_width="282dp"
+                android:layout_marginTop="5sp"
+                android:layout_marginLeft="5sp"
+                android:layout_width="282sp"
                 android:backgroundTint="@color/colorAccent"
                 android:inputType="text"
                 android:text=""
@@ -54,7 +54,7 @@
         </TableRow>
         <TableRow>
             <TextView
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="5sp"
                 android:textSize="20sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -62,17 +62,17 @@
                 android:textColor="@color/text" />
             <Spinner
                 android:id="@+id/type_auto"
-                android:minWidth="282dp"
+                android:minWidth="282sp"
                 android:minHeight="33sp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="5sp"
                 android:background="@color/text"
                 android:gravity="clip_horizontal"  />
         </TableRow>
         <TableRow>
             <TextView
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="5sp"
                 android:textSize="20sp"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
@@ -80,9 +80,9 @@
                 android:textColor="@color/text"/>
 
             <EditText
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="5sp"
                 android:textSize="20sp"
-                android:layout_width="282dp"
+                android:layout_width="282sp"
                 android:backgroundTint="@color/colorAccent"
                 android:inputType="text"
                 android:text=""
@@ -91,7 +91,7 @@
         </TableRow>
         <TableRow>
             <TextView
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="5sp"
                 android:textSize="20sp"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
@@ -99,9 +99,9 @@
                 android:textColor="@color/text"/>
 
             <EditText
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="5sp"
                 android:textSize="20sp"
-                android:layout_width="282dp"
+                android:layout_width="282sp"
                 android:backgroundTint="@color/colorAccent"
                 android:inputType="number"
                 android:text=""
@@ -110,7 +110,7 @@
         </TableRow>
         <TableRow>
             <TextView
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="5sp"
                 android:textSize="20sp"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
@@ -118,9 +118,9 @@
                 android:textColor="@color/text"/>
 
             <EditText
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="5sp"
                 android:textSize="20sp"
-                android:layout_width="282dp"
+                android:layout_width="282sp"
                 android:backgroundTint="@color/colorAccent"
                 android:inputType="text"
                 android:text=""
