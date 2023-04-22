@@ -11,7 +11,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,16 +23,27 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TableLayout;
 import android.widget.Toast;
-
 
 import com.taxieasyua.job.R;
 import com.taxieasyua.job.about.AboutActivity;
 import com.taxieasyua.job.start.StartActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class DriverActivity extends AppCompatActivity implements Postman, ActionBar.TabListener, Dialog.OnClickListener  {
     private Driver driver;
@@ -41,7 +52,6 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
     private List<String> autoList;
     private List<String> servicesList;
     private boolean valid;
-    private String addressAdmin = "taxi.easy.ua@gmail.com";
     private final int NOTIFICATION_ID = 127;
     private final String TAG = "TAG";
     private EmailValidator emailValidator;
@@ -181,7 +191,11 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
                 startActivity(intent);
                 break;
             case R.id.send_message:
-                sendEmail();
+                try {
+                    sendEmail();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 break;
             case R.id.exit:
                 this.finish();
@@ -191,8 +205,11 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
         return false;
     }
 
-    protected void sendEmail() {
+    protected void sendEmail() throws IOException {
         pauseFragment();
+
+
+
         infoComplete = true;
         for (int i = 0; i < infoList.size(); i++) {
             if (infoList.get(i).equals("")) {
@@ -213,57 +230,49 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
                 showDialog(DIALOG);
                 infoComplete = true;
             } else {
-                driver = new Driver(
-                        infoList.get(0),
-                        infoList.get(1),
-                        infoList.get(2),
-                        infoList.get(3),
-                        infoList.get(4),
-
-                        autoList.get(0),
-                        autoList.get(1),
-                        autoList.get(2),
-                        autoList.get(3),
-                        autoList.get(4),
-                        autoList.get(5)
-                     );
-
-                StringBuilder stringBuilder = new StringBuilder();
-                for (String value: servicesList) {
-                    if (value.equals("Терминал")) {
-                        addressAdmin = "takci2012@gmail.com";
-                    }
-                    stringBuilder.append(value).append("\n");
+                StringBuilder serviceSend = new StringBuilder();
+                for (String value :servicesList) {
+                    serviceSend.append(value);
+                    serviceSend.append("*");
                 }
-                String subject = "Лист від водія-кандидата";
-                String emailText = "Прошу розглянути мою кандидатуру для роботи водієм у службі(ах) таксі за переліком: \n" + stringBuilder + driver.toString();
+                Log.d(TAG, "sendEmail: " + servicesList);
+                StringBuilder autoSend = new StringBuilder();
+                autoSend
+                        .append("https://m.easy-order-taxi.site/api/driverAuto")
+                        .append("/")
+                        .append(infoList.get(0))
+                        .append("/")
+                        .append(infoList.get(1))
+                        .append("/")
+                        .append(infoList.get(2))
+                        .append("/")
+                        .append(infoList.get(3))
+                        .append("/")
+                        .append(infoList.get(4))
+                        .append("/")
+                        .append(autoList.get(0))
+                        .append("/")
+                        .append(autoList.get(1))
+                        .append("/")
+                        .append(autoList.get(2))
+                        .append("/")
+                        .append(autoList.get(3))
+                        .append("/")
+                        .append(autoList.get(4))
+                        .append("/")
+                        .append(autoList.get(5))
+                        .append("/")
+                        .append(serviceSend);
 
-
-                String[] TO = {addressAdmin};
-                String[] CC = {""};
-                Intent emailIntent = new Intent(Intent.ACTION_SEND);
-
-                emailIntent.setData(Uri.parse("mailto:"));
-                emailIntent.setType("text/plain");
-                emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
-                emailIntent.putExtra(Intent.EXTRA_CC, CC);
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
-                emailIntent.putExtra(Intent.EXTRA_TEXT, emailText);
-
-                try {
-                    startActivity(Intent.createChooser(emailIntent, "Надислати лист..."));
-                } catch (android.content.ActivityNotFoundException ex) {
-                    Toast.makeText(DriverActivity.this, "There is no email client installed.", Toast.LENGTH_SHORT).show();
-                }
+                Log.d(TAG, "sendEmail: " + autoSend);
+                URL url = new URL(autoSend.toString());
+                sendURL(url);
+                showNotification();
+                this.finish();
             }
         }
     }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        showNotification();
-    }
 
     @Override
     protected void onDestroy() {
@@ -283,7 +292,7 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
         Notification.Builder builder = new Notification.Builder(getApplicationContext());
 
         Intent intent = new Intent(getApplicationContext(), StartActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
         builder.setContentIntent(pendingIntent)
                 .setSmallIcon(R.mipmap.ic_launcher_foreground)
@@ -301,7 +310,7 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
         notification.flags = notification.flags | Notification.FLAG_INSISTENT;
         manager.notify(NOTIFICATION_ID, notification);
         Toast.makeText(this, "Повідомлення надіслано адміністратору.", Toast.LENGTH_SHORT).show();
-
+        this.finish();
     }
 
     @Override
@@ -357,5 +366,28 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
     public void onClick(DialogInterface dialog, int which) {
         this.autoList.set(0, nameTxt.getText().toString());
         Toast.makeText(this, "Збережено: "  + autoList.get(0), Toast.LENGTH_SHORT).show();
+    }
+
+    private void sendURL (URL url) {
+        AsyncTask.execute(() -> {
+
+            HttpsURLConnection urlConnection = null;
+            try {
+                urlConnection = (HttpsURLConnection) url.openConnection();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                if (urlConnection.getResponseCode() == 200) {
+                    Log.d(TAG, "run: " + urlConnection.getResponseCode());
+                } else {
+                    Log.d(TAG, "run: " + urlConnection.getResponseCode());
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            urlConnection.disconnect();
+        });
     }
 }

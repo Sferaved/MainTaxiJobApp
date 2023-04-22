@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Працевлаштування</string>
+    <string name="app_name">Анкета</string>
     <string name="main">На головну</string>
     <string name="about">Про додаток</string>
     <string name="author">Автор</string>
@@ -16,7 +16,7 @@
 
     <string name="compose_email">Compose Email</string>
     <string name="main_app_name">Таксі Лайт Юа</string>
-    <string name="second_app_name">Робота в таксі</string>
+    <string name="second_app_name">Працевлаштування у таксі</string>
     <string name="contact">Контакт</string>
     <string name="auto">авто</string>
     <string name="model_auto">Модель</string>
