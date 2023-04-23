@@ -10,7 +10,7 @@ android {
         applicationId "com.taxieasyua.job"
         minSdk 16
         targetSdk 33
-        versionCode 403
+        versionCode 404
         versionName 'integration API'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

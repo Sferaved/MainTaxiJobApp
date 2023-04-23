@@ -198,7 +198,21 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
                 }
                 break;
             case R.id.exit:
-                this.finish();
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                builder.setTitle("Таксі Лайт Юа")
+                        .setCancelable(false)
+                        .setIcon(R.mipmap.ic_launcher_round)
+                        .setMessage("Бажаєте завершити?")
+                        .setNegativeButton("Нет", ((dialog, which) -> {
+                            Toast.makeText(DriverActivity.this, "Продовжуйте заповнення анкети", Toast.LENGTH_SHORT).show();
+                        }))
+                        .setPositiveButton("Да", ((dialog, which) -> {
+                            this.finish();
+                        }));
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
                 break;
         }
 
