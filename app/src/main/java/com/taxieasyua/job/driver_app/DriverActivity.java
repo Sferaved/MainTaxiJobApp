@@ -208,7 +208,9 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
                             Toast.makeText(DriverActivity.this, "Продовжуйте заповнення анкети", Toast.LENGTH_SHORT).show();
                         }))
                         .setPositiveButton("Да", ((dialog, which) -> {
-                            this.finish();
+                            finish();
+                            Intent intent = new Intent(this, StartActivity.class);
+                            startActivity(intent);
                         }));
                 AlertDialog dialog = builder.create();
                 dialog.show();
@@ -292,13 +294,6 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
     protected void onDestroy() {
         super.onDestroy();
         Toast.makeText(this, "До побачення. Чекаємо наступного разу.", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        Toast.makeText(this, "Вітаємо. Заповніть будь-ласка всі поля для надсилання заявки", Toast.LENGTH_SHORT).show();
-
     }
 
     public void showNotification() {

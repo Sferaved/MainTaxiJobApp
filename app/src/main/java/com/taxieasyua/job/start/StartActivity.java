@@ -31,6 +31,8 @@ public class StartActivity extends Activity {
     public void onClick (View view) {
         Intent intent = new Intent(this, DriverActivity.class);
         startActivity(intent);
+        Toast.makeText(this, "Вітаємо. Заповніть будь-ласка всі поля для надсилання заявки", Toast.LENGTH_SHORT).show();
+
     }
 
 
