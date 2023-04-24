@@ -18,8 +18,10 @@ public class EmailValidator {
 
     public boolean validate(final String hex) {
         matcher = pattern.matcher(hex);
-
-        return matcher.matches();
+        if(hex.equals("відсутний")) {
+            return true;
+        } else
+            return matcher.matches();
     }
 
 }

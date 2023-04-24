@@ -111,11 +111,10 @@ public class AboutActivity extends AppCompatActivity implements ActionBar.TabLis
 
         switch (item.getItemId()) {
             case R.id.main:
-        intent = new Intent(this, DriverActivity.class);
+                this.finish();
 
-        break;
+                break;
         }
-        startActivity(intent);
         return false;
     }
 }

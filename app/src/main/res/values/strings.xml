@@ -28,4 +28,5 @@
     <string name="auto_info">Авто</string>
     <string name="services_info">Служби</string>
     <string name="save">Зберегти</string>
+    <string name="send_message">Надіслати анкету</string>
 </resources>

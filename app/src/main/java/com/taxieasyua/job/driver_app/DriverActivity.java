@@ -1,6 +1,7 @@
 package com.taxieasyua.job.driver_app;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.FragmentManager;
@@ -22,6 +23,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -29,19 +31,11 @@ import com.taxieasyua.job.R;
 import com.taxieasyua.job.about.AboutActivity;
 import com.taxieasyua.job.start.StartActivity;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -65,6 +59,9 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
     boolean infoComplete;
     private final int DIALOG = 1;
     private EditText nameTxt;
+    private Button bigBtnSend;
+
+
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -75,6 +72,8 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
         infoFragment = new InfoFragment();
         autoFragment = new AutoFragment();
         servicesFragment = new ServicesFragment();
+
+        bigBtnSend = findViewById(R.id.big_btn_send);
 
         infoList = initArray(5);
         autoList = initArray(6);
@@ -225,20 +224,7 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
         pauseFragment();
 
 
-
-        infoComplete = true;
-        for (int i = 0; i < infoList.size(); i++) {
-            if (infoList.get(i).equals("")) {
-                infoComplete = false;
-                break;
-            }
-        }
-        for (int i = 0; i < autoList.size(); i++) {
-            if (autoList.get(i).equals("")) {
-                infoComplete = false;
-                break;}
-        }
-        if (infoComplete == false) {
+        if (!verifyComplete()) {
             Toast.makeText(this, "Вибачьте. Вказано не всі дані. Відправка заявки неможлива.", Toast.LENGTH_SHORT).show();
         } else if (isValid(infoList)) {
 
@@ -251,7 +237,7 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
                     serviceSend.append(value);
                     serviceSend.append("*");
                 }
-                Log.d(TAG, "sendEmail: " + servicesList);
+
                 StringBuilder autoSend = new StringBuilder();
                 autoSend
                         .append("https://m.easy-order-taxi.site/api/driverAuto")
@@ -280,13 +266,31 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
                         .append("/")
                         .append(serviceSend);
 
-                Log.d(TAG, "sendEmail: " + autoSend);
                 URL url = new URL(autoSend.toString());
                 sendURL(url);
-                showNotification();
                 this.finish();
             }
         }
+    }
+
+
+    private boolean verifyComplete() {
+        infoComplete = true;
+        for (int i = 0; i < infoList.size(); i++) {
+            if (infoList.get(i).equals("") && i != 3) {
+                infoComplete = false;
+                break;
+            }
+        }
+        if (infoList.get(3).equals("")) {
+            infoList.set(3, "відсутний");
+        }
+        for (int i = 0; i < autoList.size(); i++) {
+            if (autoList.get(i).equals("")) {
+                infoComplete = false;
+                break;}
+        }
+        return infoComplete;
     }
 
 
@@ -318,10 +322,33 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
         notification.vibrate = vibrate;
         notification.flags = notification.flags | Notification.FLAG_INSISTENT;
         manager.notify(NOTIFICATION_ID, notification);
-        Toast.makeText(this, "Повідомлення надіслано адміністратору.", Toast.LENGTH_SHORT).show();
-        this.finish();
+       this.finish();
     }
 
+    public void showNotificationError(String message) {
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification.Builder builder = new Notification.Builder(getApplicationContext());
+
+        Intent intent = new Intent(getApplicationContext(), StartActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+        builder.setContentIntent(pendingIntent)
+                .setSmallIcon(R.mipmap.ic_launcher_foreground)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_foreground))
+                .setTicker("New notification")
+                .setWhen(System.currentTimeMillis())
+                .setAutoCancel(true)
+                .setContentTitle("Сталася помилка.")
+                .setContentText(message);
+
+        Notification notification = builder.build();
+
+        long[] vibrate = {1500,1000, 1500, 1000};
+        notification.vibrate = vibrate;
+        notification.flags = notification.flags | Notification.FLAG_INSISTENT;
+        manager.notify(NOTIFICATION_ID, notification);
+        this.finish();
+    }
     @Override
     public void fragmentMailInfo(List<String> infoList) {
         this.infoList = infoList;
@@ -371,6 +398,10 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
 
         }
     }
+    private void errorMessage() {
+
+
+    }
     @Override
     public void onClick(DialogInterface dialog, int which) {
         this.autoList.set(0, nameTxt.getText().toString());
@@ -378,25 +409,33 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
     }
 
     private void sendURL (URL url) {
-        AsyncTask.execute(() -> {
 
-            HttpsURLConnection urlConnection = null;
-            try {
-                urlConnection = (HttpsURLConnection) url.openConnection();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                if (urlConnection.getResponseCode() == 200) {
-                    Log.d(TAG, "run: " + urlConnection.getResponseCode());
-                } else {
-                    Log.d(TAG, "run: " + urlConnection.getResponseCode());
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                HttpsURLConnection urlConnection = null;
+                try {
+                    urlConnection = (HttpsURLConnection) url.openConnection();
+                    if(urlConnection.getResponseCode() == 200){
+                     showNotification();
+
+                    } else {
+                        showNotificationError("Немає зв'язку із сервером. Спробуйте пізніше.");
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                urlConnection.disconnect();
             }
-
-            urlConnection.disconnect();
         });
+
+    }
+
+    public void onClickBigBtnSend(View view) {
+        try {
+            sendEmail();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
