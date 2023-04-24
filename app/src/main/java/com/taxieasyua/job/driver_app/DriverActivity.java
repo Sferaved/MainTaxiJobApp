@@ -32,9 +32,12 @@ import com.taxieasyua.job.about.AboutActivity;
 import com.taxieasyua.job.start.StartActivity;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Exchanger;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -194,6 +197,8 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
                     sendEmail();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case R.id.exit:
@@ -220,7 +225,7 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
         return false;
     }
 
-    protected void sendEmail() throws IOException {
+    protected void sendEmail() throws IOException, InterruptedException {
         pauseFragment();
 
 
@@ -363,7 +368,7 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
     }
 
 
-    private boolean isValid(List <String> infoList) {
+    private boolean isValid(List <String> infoList) throws MalformedURLException, InterruptedException {
         valid = true;
 
         if(!emailValidator.validate(infoList.get(3))){
@@ -374,7 +379,16 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
         if(!phoneValidator.validate(infoList.get(4))){
             valid = false;
             Toast.makeText(this, "Формат вводу номера телефону: +380936665544", Toast.LENGTH_SHORT).show();
+        } else {
+            String urlString = "https://m.easy-order-taxi.site/api/driverAuto/sendCode/" + infoList.get(4);
+
+            if(phoneValidator.sendCode(urlString).equals("200")) {
+                Toast.makeText(this, "На Ваш телефон надіслано код перевірки номера.", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Помілка відправлення коду перевірки номера.", Toast.LENGTH_SHORT).show();
+            }
         }
+
 
         return valid;
     }
@@ -417,8 +431,7 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
                 try {
                     urlConnection = (HttpsURLConnection) url.openConnection();
                     if(urlConnection.getResponseCode() == 200){
-                     showNotification();
-
+                        showNotification();
                     } else {
                         showNotificationError("Немає зв'язку із сервером. Спробуйте пізніше.");
                     }
@@ -436,6 +449,14 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
             sendEmail();
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
+
+
+
+
+
+
 }

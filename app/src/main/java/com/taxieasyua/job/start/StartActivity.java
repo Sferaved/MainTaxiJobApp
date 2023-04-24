@@ -12,16 +12,23 @@ import android.widget.Toast;
 import com.taxieasyua.job.R;
 import com.taxieasyua.job.driver_app.DriverActivity;
 
+
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.HttpURLConnection;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.util.concurrent.Exchanger;
 
 import javax.net.ssl.HttpsURLConnection;
 
 
 public class StartActivity extends Activity {
     private final String TAG = "TAG";
+    private String resp;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,9 +39,5 @@ public class StartActivity extends Activity {
         Intent intent = new Intent(this, DriverActivity.class);
         startActivity(intent);
         Toast.makeText(this, "Вітаємо. Заповніть будь-ласка всі поля для надсилання заявки", Toast.LENGTH_SHORT).show();
-
     }
-
-
-
 }
