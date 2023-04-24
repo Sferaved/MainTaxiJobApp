@@ -231,7 +231,7 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
 
         if (!verifyComplete()) {
             Toast.makeText(this, "Вибачьте. Вказано не всі дані. Відправка заявки неможлива.", Toast.LENGTH_SHORT).show();
-        } else if (isValid(infoList)) {
+        } else if (isValid()) {
 
             if(autoList.get(0).equals("інше")){
                 showDialog(DIALOG);
@@ -368,7 +368,7 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
     }
 
 
-    private boolean isValid(List <String> infoList) throws MalformedURLException, InterruptedException {
+    private boolean isValid() throws MalformedURLException, InterruptedException {
         valid = true;
 
         if(!emailValidator.validate(infoList.get(3))){
@@ -376,18 +376,20 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
             Toast.makeText(this, "Перевірте формат вводу електронної пошти: " + infoList.get(3), Toast.LENGTH_SHORT).show();
         };
 
-        if(!phoneValidator.validate(infoList.get(4))){
-            valid = false;
-            Toast.makeText(this, "Формат вводу номера телефону: +380936665544", Toast.LENGTH_SHORT).show();
-        } else {
-            String urlString = "https://m.easy-order-taxi.site/api/driverAuto/sendCode/" + infoList.get(4);
 
-            if(phoneValidator.sendCode(urlString).equals("200")) {
-                Toast.makeText(this, "На Ваш телефон надіслано код перевірки номера.", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this, "Помілка відправлення коду перевірки номера.", Toast.LENGTH_SHORT).show();
+            if(!phoneValidator.validate(infoList.get(4))){
+                valid = false;
+                Toast.makeText(this, "Формат вводу номера телефону: +380936665544", Toast.LENGTH_SHORT).show();
+            } else if(!autoList.get(0).equals("інше")){
+                String urlString = "https://m.easy-order-taxi.site/api/driverAuto/sendCode/" + infoList.get(4);
+
+                if(phoneValidator.sendCode(urlString).equals("200")) {
+                    Toast.makeText(this, "На Ваш телефон надіслано код перевірки номера.", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, "Помілка відправлення коду перевірки номера.", Toast.LENGTH_SHORT).show();
+                }
             }
-        }
+
 
 
         return valid;
