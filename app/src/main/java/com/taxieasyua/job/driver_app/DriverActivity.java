@@ -31,6 +31,8 @@ import com.taxieasyua.job.R;
 import com.taxieasyua.job.about.AboutActivity;
 import com.taxieasyua.job.start.StartActivity;
 
+import org.json.JSONException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -74,7 +76,15 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
 
         infoFragment = new InfoFragment();
         autoFragment = new AutoFragment();
-        servicesFragment = new ServicesFragment();
+        try {
+            servicesFragment = new ServicesFragment();
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
 
         bigBtnSend = findViewById(R.id.big_btn_send);
 
@@ -383,11 +393,11 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
             } else if(!autoList.get(0).equals("інше")){
                 String urlString = "https://m.easy-order-taxi.site/api/driverAuto/sendCode/" + infoList.get(4);
 
-                if(phoneValidator.sendCode(urlString).equals("200")) {
-                    Toast.makeText(this, "На Ваш телефон надіслано код перевірки номера.", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(this, "Помілка відправлення коду перевірки номера.", Toast.LENGTH_SHORT).show();
-                }
+//                if(phoneValidator.sendCode(urlString).equals("200")) {
+//                    Toast.makeText(this, "На Ваш телефон надіслано код перевірки номера.", Toast.LENGTH_LONG).show();
+//                } else {
+//                    Toast.makeText(this, "Помілка відправлення коду перевірки номера.", Toast.LENGTH_SHORT).show();
+//                }
             }
 
 
