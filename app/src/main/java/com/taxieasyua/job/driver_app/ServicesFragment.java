@@ -85,37 +85,8 @@ public class ServicesFragment extends Fragment {
         } catch (ClassCastException ignored) {}
     }
     private ArrayList<String> services () throws MalformedURLException, InterruptedException, JSONException {
-
-//        String[] servicesArr;
-//        servicesArr = new String[]{
-//                "Терминал",
-//                "Таксі Лайт Юа",
-//                "UBER",
-//                "UKLON",
-//                "BOLT",
-//                "OnTaxi",
-//                "838",
-//                "Lubimoe Taxi",
-//                "3040",
-//                "Максім"
-//        };
-
         String url = "https://m.easy-order-taxi.site/api/servicesAll/Android";
-
         return  servicesAll(url);
-
-//        return new String[]{
-//                "Терминал",
-//                "Таксі Лайт Юа",
-//                "UBER",
-//                "UKLON",
-//                "BOLT",
-//                "OnTaxi",
-//                "838",
-//                "Lubimoe Taxi",
-//                "3040",
-//                "Максім"
-//        };
     }
 
 
