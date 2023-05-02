@@ -214,14 +214,14 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
             case R.id.exit:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-                builder.setTitle("Таксі Лайт Юа")
+                builder.setTitle("  ")
                         .setCancelable(false)
                         .setIcon(R.mipmap.ic_launcher_round)
                         .setMessage("Бажаєте завершити?")
-                        .setNegativeButton("Нет", ((dialog, which) -> {
+                        .setNegativeButton("Ні", ((dialog, which) -> {
                             Toast.makeText(DriverActivity.this, "Продовжуйте заповнення анкети", Toast.LENGTH_SHORT).show();
                         }))
-                        .setPositiveButton("Да", ((dialog, which) -> {
+                        .setPositiveButton("Так", ((dialog, which) -> {
                             finish();
                             Intent intent = new Intent(this, StartActivity.class);
                             startActivity(intent);
