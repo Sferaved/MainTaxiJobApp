@@ -10,8 +10,8 @@ android {
         applicationId "com.taxieasyua.job"
         minSdk 16
         targetSdk 33
-        versionCode 411
-        versionName 'new logo'
+        versionCode 412
+        versionName 'inernet connection'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
