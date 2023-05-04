@@ -3,23 +3,33 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    android:gravity="center">
+    android:background="@color/background">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        android:fillViewport="true">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text"
+        android:textSize="20sp"
+        android:text="Про додаток"
+        android:textStyle="bold"
+        android:gravity="center" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text"
+        android:layout_margin="10sp"
+        android:gravity="left"
+        android:text="За допомогою програми можна зробити легко крок для роботи на авто та відправити запит до служби як кандидата на співпрацю.
+Авто дозволяє працювати в будь-який зручний для Вас час без спеціальних умов, обов'язкових замовлень." />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/text"
-        android:layout_margin="10sp"
-        android:gravity="left"
-        android:text="За допомогою програми можна зробити легко крок для роботи на авто та відправити запит до служби як кандидата на співпрацю." />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/text"
-        android:layout_margin="10sp"
-        android:gravity="left"
-        android:text="Авто дозволяє працювати в будь-який зручний для Вас час без спеціальних умов, обов'язкових замовлень." />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -47,30 +57,37 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/text"
-        android:text="Версія: 4.15" />
+        android:layout_gravity="center"
+        android:text="Версія: 4.16" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/text"
+        android:layout_gravity="center"
         android:text="Автор: Андрій Коржов" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/text"
         android:autoLink="web"
+        android:layout_gravity="center"
         android:text="Сайт: https://m.easy-order-taxi.site" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/text"
+        android:layout_gravity="center"
         android:autoLink="email"
         android:text="Email: taxi.easy.ua@gmail.com" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/text"
+        android:layout_gravity="center"
         android:text="Зроблено: 2023 рік" />
 
+    </LinearLayout>
+</ScrollView>
 
 </LinearLayout>
