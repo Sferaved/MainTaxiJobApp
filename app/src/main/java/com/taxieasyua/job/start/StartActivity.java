@@ -9,11 +9,13 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.taxieasyua.job.R;
+import com.taxieasyua.job.about.AboutActivity;
 import com.taxieasyua.job.driver_app.DriverActivity;
 import com.taxieasyua.job.driver_app.PhoneValidator;
 
@@ -51,6 +53,53 @@ public class StartActivity extends Activity {
         if(!hasConnection()) {
             Toast.makeText(this, "Перевірте інтернет-підключення", Toast.LENGTH_SHORT).show();
             finish();
+        } else {
+            final FloatingActionButton fabStart = findViewById(R.id.btn_1);
+            final FloatingActionButton fabInfo = findViewById(R.id.btn_2);
+            fabStart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick (View view) {
+                    if(!hasConnection()) {
+                        Toast.makeText(StartActivity.this, "Перевірте інтернет-підключення", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent intent = new Intent(StartActivity.this, DriverActivity.class);
+                        try {
+                            if (verifyConnection("https://m.easy-order-taxi.site/api/driver").equals("200")) {
+                                startActivity(intent);
+                                Toast.makeText(StartActivity.this, "Вітаємо. Заповніть будь-ласка всі поля для надсилання заявки", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(StartActivity.this, "Помилка підключення до сервера. Перевірте підключення до Інтернету або спробуйте пізніше.", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (MalformedURLException e) {
+                            throw new RuntimeException(e);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                }
+            });
+
+            fabInfo.setOnClickListener(view -> {
+                if(!hasConnection()) {
+                    Toast.makeText(StartActivity.this, "Перевірте інтернет-підключення", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent intent = new Intent(StartActivity.this, AboutActivity.class);
+                    try {
+                        if (verifyConnection("https://m.easy-order-taxi.site/api/driver").equals("200")) {
+                            startActivity(intent);
+                            Toast.makeText(StartActivity.this, "Вітаємо. Ознайомтеся з інформацією про додаток.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(StartActivity.this, "Помилка підключення до сервера. Перевірте підключення до Інтернету або спробуйте пізніше.", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (MalformedURLException e) {
+                        throw new RuntimeException(e);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+            });
         }
 
     }

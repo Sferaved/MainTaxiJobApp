@@ -10,4 +10,6 @@
     <color name="background">#FF3700B3</color>
     <color name="text">#FFFFFFFF</color>
     <color name="colorAccent">#FF03DAC5</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
 </resources>

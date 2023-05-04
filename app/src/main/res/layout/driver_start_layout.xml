@@ -1,30 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_vertical"
-    android:background="@color/background">
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher_round"
-        android:layout_gravity="center_horizontal" />
-
+    android:background="@color/white">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textSize="20sp"
         android:text="@string/second_app_name"
-        android:textColor="@color/text"/>
-    <Button
+        android:textColor="@color/black"/>
+
+    <ImageView
+        android:layout_width="250sp"
+        android:layout_height="250sp"
+        android:src="@drawable/logo"
+        android:layout_gravity="center_horizontal" />
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/begin"
-        android:layout_gravity="center_horizontal"
-        android:onClick="onClick"
-        android:id="@+id/btn_start" />
+        android:id="@+id/floating_menu"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        fab:fab_addButtonColorNormal="@color/background"
+        fab:fab_addButtonPlusIconColor="#ffff"
+        fab:fab_labelStyle="@style/menu_label_style">
 
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/btn_1"
+            fab:fab_icon ="@android:drawable/ic_media_play"
+            fab:fab_size="normal"
+            fab:fab_title="Розпочати"/>
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/btn_2"
+            fab:fab_icon ="@android:drawable/ic_media_play"
+            fab:fab_size="normal"
+            fab:fab_title="Про додаток"/>
+
+
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
 </LinearLayout>

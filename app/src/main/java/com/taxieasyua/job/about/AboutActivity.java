@@ -13,6 +13,7 @@ import android.view.MenuItem;
 
 import com.taxieasyua.job.R;
 import com.taxieasyua.job.driver_app.DriverActivity;
+import com.taxieasyua.job.start.StartActivity;
 
 
 public class AboutActivity extends AppCompatActivity implements ActionBar.TabListener{
@@ -111,6 +112,8 @@ public class AboutActivity extends AppCompatActivity implements ActionBar.TabLis
 
         switch (item.getItemId()) {
             case R.id.main:
+                Intent intent = new Intent(this, DriverActivity.class);
+                startActivity(intent);
                 this.finish();
 
                 break;

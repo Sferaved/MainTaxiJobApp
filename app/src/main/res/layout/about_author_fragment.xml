@@ -6,12 +6,48 @@
     android:background="@color/background"
     android:gravity="center">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text"
+        android:layout_margin="10sp"
+        android:gravity="left"
+        android:text="За допомогою програми можна зробити легко крок для роботи на авто та відправити запит до служби як кандидата на співпрацю." />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text"
+        android:layout_margin="10sp"
+        android:gravity="left"
+        android:text="Авто дозволяє працювати в будь-який зручний для Вас час без спеціальних умов, обов'язкових замовлень." />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text"
+        android:layout_margin="10sp"
+        android:gravity="left"
+        android:text="Сервіс для тих, хто хоче заробити автомобілем, попутниками, окупити витрати на його утримання або розпочати власний бізнес у сфері перевезень. Робота з кількома фірмами без прив'язки до офісу та за вільним графіком." />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text"
+        android:layout_margin="10sp"
+        android:gravity="left"
+        android:text="Сервіси працюють у всіх містах України. Ось кілька із них: Київ, Харків, Одеса, Дніпро, Запоріжжя, Вінниця, Полтава, Суми, Черкаси, Кропивницький. Херсон, Житомир, Чернігів, Ужгород, Львів, Тернопіль, Івано-Франківськ, Рівне, Вінниця, Чернівці, Луцьк, Хмельницький." />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text"
+        android:layout_margin="10sp"
+        android:gravity="left"
+        android:text="Влаштуватись у сервіс Драйвер дуже просто! Для цього необхідно встановити програму та заповнити дані. А після того, як заявку буде оброблено, прийде сповіщення, і можна приступати до роботи!
+" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/text"
-        android:text="Версія: 4.13" />
+        android:text="Версія: 4.14" />
 
     <TextView
         android:layout_width="wrap_content"
