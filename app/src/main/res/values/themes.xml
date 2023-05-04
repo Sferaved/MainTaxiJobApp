@@ -16,8 +16,8 @@
     <style name="Theme.TaxiEasyUaJob.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="menu_label_style">
-        <item name="android:background">@android:drawable/toast_frame</item>
+        <item name="android:background">@color/white</item>
         <item name="android:color">@color/purple_700</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 </resources>
