@@ -2,12 +2,19 @@ package com.taxieasyua.job.driver_app;
 
 
 
+import static com.taxieasyua.job.start.StartActivity.Auto_Info;
+import static com.taxieasyua.job.start.StartActivity.Driver_Info;
+import static com.taxieasyua.job.start.StartActivity.TABLE_AUTO_INFO;
+import static com.taxieasyua.job.start.StartActivity.logCursor;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +25,7 @@ import android.widget.Spinner;
 
 
 import com.taxieasyua.job.R;
+import com.taxieasyua.job.start.StartActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,11 +50,32 @@ public class AutoFragment extends Fragment {
         yearsAuto = view.findViewById(R.id.years_auto);
         numberAuto =  view.findViewById(R.id.number_auto);
 
+        Auto_Info = logCursor(TABLE_AUTO_INFO);
+        if (Auto_Info.size() == 7) {
+
+            modelAuto.setText(Auto_Info.get(2));
+            colorAuto.setText(Auto_Info.get(4));
+            yearsAuto.setText(Auto_Info.get(5));
+            numberAuto.setText(Auto_Info.get(6));
+        };
+
         ArrayAdapter<String> adapterAutos = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_spinner_item, autos);
         Spinner spinnerAutos = view.findViewById(R.id.list_auto);
         spinnerAutos.setAdapter(adapterAutos);
         spinnerAutos.setPrompt("Title");
-        spinnerAutos.setSelection(0);
+        if (Auto_Info.size() == 7) {
+            for (int i = 0; i < autos.length; i++) {
+                if(autos[i].equals(Auto_Info.get(1))) {
+                    spinnerAutos.setSelection(i);
+                    auto = autos[i];
+                    break;
+                }
+            }
+            spinnerAutos.setSelection(autos.length-1);
+        } else
+                spinnerAutos.setSelection(0);
+
+
         spinnerAutos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -62,7 +91,17 @@ public class AutoFragment extends Fragment {
         Spinner spinnerTypes = view.findViewById(R.id.type_auto);
         spinnerTypes.setAdapter(adapterTypes);
         spinnerTypes.setPrompt("Title");
-        spinnerTypes.setSelection(0);
+
+        if (Auto_Info.size() == 7) {
+            for (int i = 0; i < types.length; i++) {
+                Log.d(TAG, "types[i].equals(Auto_Info.get(3)): " + types[i].equals(Auto_Info.get(3)));
+                if(types[i].equals(Auto_Info.get(3))) {
+                    spinnerTypes.setSelection(i);
+                    type_auto = types[i];
+                    break;
+                }
+            }
+        } else spinnerTypes.setSelection(0);
         spinnerTypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

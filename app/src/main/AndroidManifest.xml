@@ -30,6 +30,8 @@
                 android:value="" />
         </activity>
         <activity android:name=".about.AboutActivity" />
+
+        <activity android:name="com.taxieasyua.job.search3.Search3Activity" />
     </application>
 
 </manifest>

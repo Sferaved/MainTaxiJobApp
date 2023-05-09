@@ -10,8 +10,8 @@ android {
         applicationId "com.taxieasyua.job"
         minSdk 16
         targetSdk 33
-        versionCode 416
-        versionName 'new color and disigne start button'
+        versionCode 500
+        versionName 'add sql base'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

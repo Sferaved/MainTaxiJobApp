@@ -121,12 +121,13 @@ public class ServicesFragment extends Fragment {
         ServicesFragment.ResultFromThread first = new ResultFromThread(exchanger);
 
         JSONArray jsonarray = new JSONArray(first.message);
-        Log.d(TAG, "servicesAll contacts: " + jsonarray );
+//        Log.d(TAG, "servicesAll contacts: " + jsonarray );
         ArrayList<String> servicesAll = new ArrayList<>();
         for(int i=0; i < jsonarray.length(); i++) {
             JSONObject jsonobject = jsonarray.getJSONObject(i);
             servicesAll.add(jsonobject.getString("name"));
-        } Log.d(TAG, "servicesAll: " + servicesAll);
+        }
+//        Log.d(TAG, "servicesAll: " + servicesAll);
 
         return servicesAll;
     }

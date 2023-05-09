@@ -1,18 +1,27 @@
 package com.taxieasyua.job.driver_app;
 
+import static com.taxieasyua.job.start.StartActivity.Auto_Info;
+import static com.taxieasyua.job.start.StartActivity.Driver_Info;
+import static com.taxieasyua.job.start.StartActivity.TABLE_AUTO_INFO;
+import static com.taxieasyua.job.start.StartActivity.TABLE_DRIVER_INFO;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.FragmentManager;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -52,7 +61,7 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
     private List<String> servicesList;
     private boolean valid;
     private final int NOTIFICATION_ID = 127;
-    private final String TAG = "TAG";
+
     private EmailValidator emailValidator;
     private PhoneValidator phoneValidator;
 
@@ -223,6 +232,7 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
                         }))
                         .setPositiveButton("Так", ((dialog, which) -> {
                             finish();
+                            StartActivity.database.close();
                             Intent intent = new Intent(this, StartActivity.class);
                             startActivity(intent);
                         }));
@@ -240,7 +250,7 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
 
 
         if (!verifyComplete()) {
-            Toast.makeText(this, "Вибачьте. Вказано не всі дані. Відправка заявки неможлива.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Перед надсиланням перевірте всі поля Анкети.", Toast.LENGTH_SHORT).show();
         } else if (isValid()) {
 
             if(autoList.get(0).equals("інше")){
@@ -281,6 +291,18 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
                         .append("/")
                         .append(serviceSend);
 
+                if (Driver_Info.size() == 0) {
+                     StartActivity.insertRecordsDriver(infoList);
+                } else {
+                    StartActivity.updateRecordsDriver(infoList);
+                }
+
+                if (Auto_Info.size() == 0) {
+                    StartActivity.insertRecordsAuto(autoList);
+                } else {
+                    StartActivity.updateRecordsAuto(autoList);
+                }
+
                 URL url = new URL(autoSend.toString());
                 sendURL(url);
                 this.finish();
@@ -316,27 +338,77 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
     }
 
     public void showNotification() {
-        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+// The id of the channel.
+        String id = "my_channel_01";
+
+// The user-visible name of the channel.
+        CharSequence name = "channel_name";
+
+// The user-visible description of the channel.
+        String description = "channel_description";
+
+        int importance = NotificationManager.IMPORTANCE_LOW;
+
+        NotificationChannel mChannel = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mChannel = new NotificationChannel(id, name,importance);
+        }
+
+// Configure the notification channel.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mChannel.setDescription(description);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mChannel.enableLights(true);
+        }
+// Sets the notification light color for notifications posted to this
+// channel, if the device supports this feature.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mChannel.setLightColor(Color.RED);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mChannel.enableVibration(true);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mNotificationManager.createNotificationChannel(mChannel);
+        }
+
+
         Notification.Builder builder = new Notification.Builder(getApplicationContext());
+        int notifyID = 1;
+
+// The id of the channel.
+        String CHANNEL_ID = "my_channel_01";
 
         Intent intent = new Intent(getApplicationContext(), StartActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
-        builder.setContentIntent(pendingIntent)
-                .setSmallIcon(R.mipmap.ic_launcher_foreground)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_foreground))
-                .setTicker("New notification")
-                .setWhen(System.currentTimeMillis())
-                .setAutoCancel(true)
-                .setContentTitle("Повідомлення надіслано адміністратору.")
-                .setContentText("Очікуйте відповіді на електронну пошту або дзвінок.");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            builder.setContentIntent(pendingIntent)
+                    .setSmallIcon(R.mipmap.ic_launcher_foreground)
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_foreground))
+                    .setTicker("Нове сповіщення")
+                    .setWhen(System.currentTimeMillis())
+                    .setChannelId(CHANNEL_ID)
+                    .setAutoCancel(true)
+                    .setContentTitle("Повідомлення надіслано адміністратору.")
+                    .setContentText("Очікуйте відповіді на електронну пошту або дзвінок.");
+        }
 
         Notification notification = builder.build();
 
-        long[] vibrate = {1500,1000, 1500, 1000};
-        notification.vibrate = vibrate;
-        notification.flags = notification.flags | Notification.FLAG_INSISTENT;
-        manager.notify(NOTIFICATION_ID, notification);
+
+        mNotificationManager.notify(NOTIFICATION_ID, notification);
        this.finish();
     }
 
@@ -424,13 +496,9 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
 
         }
     }
-    private void errorMessage() {
-
-
-    }
     @Override
     public void onClick(DialogInterface dialog, int which) {
-        this.autoList.set(0, nameTxt.getText().toString());
+        autoList.set(0, nameTxt.getText().toString());
         Toast.makeText(this, "Збережено: "  + autoList.get(0), Toast.LENGTH_SHORT).show();
     }
 
