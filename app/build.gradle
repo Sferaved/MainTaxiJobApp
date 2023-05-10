@@ -10,8 +10,8 @@ android {
         applicationId "com.taxieasyua.job"
         minSdk 16
         targetSdk 33
-        versionCode 500
-        versionName 'add sql base'
+        versionCode 501
+        versionName 'add sql base (fix save brand)'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

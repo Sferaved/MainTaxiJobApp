@@ -27,6 +27,6 @@ public class Search3Activity extends Activity {
     }
 
     private static final String[] COUNTRIES = new String[] {
-            "Belgium", "France", "Italy", "Germany", "Spain", "Belgium2", "France2", "Italy2", "Germany2", "Spain"
+            "Belgium", "France", "Italy", "Germany", "Spain", "Belgium2", "France2", "Italy2", "Germany2", "Spain2", "Belgium3", "France3", "Italy3", "Germany3", "Spain3"
     };
 }

@@ -63,15 +63,18 @@ public class AutoFragment extends Fragment {
         Spinner spinnerAutos = view.findViewById(R.id.list_auto);
         spinnerAutos.setAdapter(adapterAutos);
         spinnerAutos.setPrompt("Title");
+        int i;
         if (Auto_Info.size() == 7) {
-            for (int i = 0; i < autos.length; i++) {
+            for (i = 0; i < autos.length; i++) {
                 if(autos[i].equals(Auto_Info.get(1))) {
                     spinnerAutos.setSelection(i);
                     auto = autos[i];
                     break;
                 }
             }
-            spinnerAutos.setSelection(autos.length-1);
+            if( i == autos.length-1){
+                spinnerAutos.setSelection(autos.length-1);
+            }
         } else
                 spinnerAutos.setSelection(0);
 
@@ -93,7 +96,7 @@ public class AutoFragment extends Fragment {
         spinnerTypes.setPrompt("Title");
 
         if (Auto_Info.size() == 7) {
-            for (int i = 0; i < types.length; i++) {
+            for (i = 0; i < types.length; i++) {
                 Log.d(TAG, "types[i].equals(Auto_Info.get(3)): " + types[i].equals(Auto_Info.get(3)));
                 if(types[i].equals(Auto_Info.get(3))) {
                     spinnerTypes.setSelection(i);
