@@ -9,4 +9,10 @@
         android:title="@string/main"
         app:showAsAction="never"
         />
+    <item
+        android:id="@+id/friend"
+        android:orderInCategory="1"
+        android:title="@string/friend"
+        app:showAsAction="never"
+        />
 </menu>

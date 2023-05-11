@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Анкета</string>
     <string name="main">На головну</string>
+    <string name="friend">Порадити другові</string>
     <string name="about">Про додаток</string>
     <string name="author">Автор</string>
     <string name="confidantional">Захист даних</string>

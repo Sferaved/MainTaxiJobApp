@@ -2,6 +2,7 @@ package com.taxieasyua.job.about;
 
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.taxieasyua.job.R;
 import com.taxieasyua.job.driver_app.DriverActivity;
@@ -109,13 +111,33 @@ public class AboutActivity extends AppCompatActivity implements ActionBar.TabLis
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
+        Intent intent;
         switch (item.getItemId()) {
             case R.id.main:
-                Intent intent = new Intent(this, DriverActivity.class);
+                 intent = new Intent(this, DriverActivity.class);
                 startActivity(intent);
                 this.finish();
 
+                break;
+            case R.id.friend:
+                String subject = "Андроид-додаток для влаштування на роботу.";
+                String body = "Мої вітання, друже. \n \n Знайшов чудовий додаток для влаштування на роботу водієм. \n \n Раджу спробувати за посиланням в офіційному магазині Google: \n\n https://play.google.com/store/apps/details?id=com.taxieasyua.job \n\n Гарного дня, друже. \n Ще побачимось.";
+
+                String[] CC = {""};
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+                emailIntent.setData(Uri.parse("mailto:"));
+                emailIntent.setType("text/plain");
+                emailIntent.putExtra(Intent.EXTRA_CC, CC);
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+                emailIntent.putExtra(Intent.EXTRA_TEXT, body);
+
+                try {
+                    startActivity(Intent.createChooser(emailIntent, "Порадити другові додаток..."));
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(AboutActivity.this, "Поштовий клієнт не встановлено.", Toast.LENGTH_SHORT).show();
+                }
+                this.finish();
                 break;
         }
         return false;
