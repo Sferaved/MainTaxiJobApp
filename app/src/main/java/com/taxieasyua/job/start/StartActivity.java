@@ -1,18 +1,22 @@
 package com.taxieasyua.job.start;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -49,14 +53,18 @@ public class StartActivity extends Activity {
         initDB();
 
         if(!hasConnection()) {
-            Toast.makeText(this, "Перевірте інтернет-підключення", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Перевірте інтернет-підключення або зателефонуйте оператору.", Toast.LENGTH_SHORT).show();
             finish();
         } else {
             final FloatingActionButton fabStart = findViewById(R.id.btn_1);
             final FloatingActionButton fabInfo = findViewById(R.id.btn_2);
+            final FloatingActionButton fabAdmin = findViewById(R.id.btn_3);
             fabStart.setOnClickListener(view -> {
                 if(!hasConnection()) {
-                    Toast.makeText(StartActivity.this, "Перевірте інтернет-підключення", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(StartActivity.this, "Перевірте інтернет-підключення або зателефонуйте оператору.", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(Intent.ACTION_CALL);
+                    intent.setData(Uri.parse("tel:0934066749"));
+                    startActivity(intent);
                 } else {
                     Intent intent = new Intent(StartActivity.this, DriverActivity.class);
                     try {
@@ -77,7 +85,10 @@ public class StartActivity extends Activity {
 
             fabInfo.setOnClickListener(view -> {
                 if(!hasConnection()) {
-                    Toast.makeText(StartActivity.this, "Перевірте інтернет-підключення", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(StartActivity.this, "Перевірте інтернет-підключення або зателефонуйте оператору.", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(Intent.ACTION_CALL);
+                    intent.setData(Uri.parse("tel:0934066749"));
+                    startActivity(intent);
                 } else {
                     Intent intent = new Intent(StartActivity.this, AboutActivity.class); //*******************
                     try {
@@ -93,7 +104,17 @@ public class StartActivity extends Activity {
                         throw new RuntimeException(e);
                     }
                 }
-
+            });
+            fabAdmin.setOnClickListener(view -> {
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse("tel:0934066749"));
+                if (ActivityCompat.checkSelfPermission(StartActivity.this,
+                        Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(StartActivity.this, "Дозвольте застосунку отримати доступ у панелі налаштувань телефону та спробуйте ще.", Toast.LENGTH_LONG).show();
+                    finishAffinity();
+                    return;
+                }
+                startActivity(intent);
             });
 
         }

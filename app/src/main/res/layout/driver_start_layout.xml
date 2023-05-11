@@ -37,14 +37,25 @@
             android:id="@+id/btn_1"
             fab:fab_icon ="@android:drawable/ic_media_play"
             fab:fab_size="normal"
+            fab:fab_colorNormal="@color/cardview_light_background"
             fab:fab_title="Розпочати"/>
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/btn_2"
-            fab:fab_icon ="@android:drawable/ic_media_play"
+            fab:fab_icon ="@android:drawable/ic_menu_info_details"
+            fab:fab_colorNormal="@color/cardview_light_background"
             fab:fab_size="normal"
             fab:fab_title="Про додаток"/>
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/btn_3"
+            fab:fab_icon ="@android:drawable/ic_menu_call"
+            fab:fab_colorNormal="@color/cardview_light_background"
+            fab:fab_size="normal"
+            fab:fab_title="Оператор"/>
 
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
