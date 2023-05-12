@@ -10,8 +10,8 @@ android {
         applicationId "com.taxieasyua.job"
         minSdk 16
         targetSdk 33
-        versionCode 504
-        versionName 'add  email to friend'
+        versionCode 506
+        versionName 'start page layout'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
