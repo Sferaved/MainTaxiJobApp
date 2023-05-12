@@ -15,6 +15,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
@@ -53,26 +54,28 @@ public class StartActivity extends Activity {
         initDB();
 
         if(!hasConnection()) {
-            Toast.makeText(this, "Перевірте інтернет-підключення або зателефонуйте оператору.", Toast.LENGTH_SHORT).show();
-            finish();
+            Toast.makeText(this, "Перевірте інтернет-підключення або зателефонуйте оператору.", Toast.LENGTH_LONG).show();
+            Intent setIntent = new Intent(Settings.ACTION_SETTINGS);
+            startActivity(setIntent);
         } else {
             final FloatingActionButton fabStart = findViewById(R.id.btn_1);
             final FloatingActionButton fabInfo = findViewById(R.id.btn_2);
             final FloatingActionButton fabAdmin = findViewById(R.id.btn_3);
             fabStart.setOnClickListener(view -> {
                 if(!hasConnection()) {
-                    Toast.makeText(StartActivity.this, "Перевірте інтернет-підключення або зателефонуйте оператору.", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Intent.ACTION_CALL);
-                    intent.setData(Uri.parse("tel:0934066749"));
-                    startActivity(intent);
+                    Toast.makeText(StartActivity.this, "Перевірте інтернет-підключення або зателефонуйте оператору.", Toast.LENGTH_LONG).show();
+                    Intent setIntent = new Intent(Settings.ACTION_SETTINGS);
+                    startActivity(setIntent);
                 } else {
                     Intent intent = new Intent(StartActivity.this, DriverActivity.class);
                     try {
                         if (verifyConnection("https://m.easy-order-taxi.site/api/driver").equals("200")) {
                             startActivity(intent);
-                            Toast.makeText(StartActivity.this, "Вітаємо. Заповніть будь-ласка всі поля для надсилання заявки", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(StartActivity.this, "Вітаємо. Заповніть будь-ласка всі поля для надсилання заявки", Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(StartActivity.this, "Помилка підключення до сервера. Перевірте підключення до Інтернету або спробуйте пізніше.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(StartActivity.this, "Помилка підключення до сервера. Перевірте підключення до Інтернету або спробуйте пізніше.", Toast.LENGTH_LONG).show();
+                            Intent setIntent = new Intent(Settings.ACTION_SETTINGS);
+                            startActivity(setIntent);
                         }
                     } catch (MalformedURLException e) {
                         throw new RuntimeException(e);
@@ -85,18 +88,19 @@ public class StartActivity extends Activity {
 
             fabInfo.setOnClickListener(view -> {
                 if(!hasConnection()) {
-                    Toast.makeText(StartActivity.this, "Перевірте інтернет-підключення або зателефонуйте оператору.", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Intent.ACTION_CALL);
-                    intent.setData(Uri.parse("tel:0934066749"));
-                    startActivity(intent);
+                    Toast.makeText(StartActivity.this, "Перевірте інтернет-підключення або зателефонуйте оператору.", Toast.LENGTH_LONG).show();
+                    Intent setIntent = new Intent(Settings.ACTION_SETTINGS);
+                    startActivity(setIntent);
                 } else {
                     Intent intent = new Intent(StartActivity.this, AboutActivity.class); //*******************
                     try {
                         if (verifyConnection("https://m.easy-order-taxi.site/api/driver").equals("200")) {
                             startActivity(intent);
-                            Toast.makeText(StartActivity.this, "Вітаємо. Ознайомтеся з інформацією про додаток.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(StartActivity.this, "Вітаємо. Ознайомтеся з інформацією про додаток.", Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(StartActivity.this, "Помилка підключення до сервера. Перевірте підключення до Інтернету або спробуйте пізніше.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(StartActivity.this, "Помилка підключення до сервера. Перевірте інтернет-підключення або зателефонуйте оператору.", Toast.LENGTH_LONG).show();
+                            Intent setIntent = new Intent(Settings.ACTION_SETTINGS);
+                            startActivity(setIntent);
                         }
                     } catch (MalformedURLException e) {
                         throw new RuntimeException(e);
@@ -111,7 +115,14 @@ public class StartActivity extends Activity {
                 if (ActivityCompat.checkSelfPermission(StartActivity.this,
                         Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(StartActivity.this, "Дозвольте застосунку отримати доступ у панелі налаштувань телефону та спробуйте ще.", Toast.LENGTH_LONG).show();
-                    finishAffinity();
+                    final Intent i = new Intent();
+                    i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    i.addCategory(Intent.CATEGORY_DEFAULT);
+                    i.setData(Uri.parse("package:" + this.getPackageName()));
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                    this.startActivity(i);
                     return;
                 }
                 startActivity(intent);
@@ -183,6 +194,7 @@ public class StartActivity extends Activity {
         if (activeNetwork != null && activeNetwork.isConnected()) {
             return true;
         }
+        this.finish();
         return false;
     }
 
