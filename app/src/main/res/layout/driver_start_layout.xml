@@ -14,8 +14,9 @@
         android:layout_width="198dp"
         android:layout_height="184dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="4dp"
         android:src="@drawable/logo"
+        fab:layout_constraintBottom_toTopOf="@+id/second_name"
         fab:layout_constraintEnd_toEndOf="parent"
         fab:layout_constraintHorizontal_bias="0.5"
         fab:layout_constraintStart_toStartOf="parent"
@@ -26,18 +27,19 @@
         android:layout_width="223dp"
         android:layout_height="37dp"
         android:layout_gravity="center"
-        android:layout_marginTop="36dp"
-        android:layout_marginEnd="69dp"
-        android:layout_marginRight="69dp"
+        android:layout_marginStart="94dp"
+        android:layout_marginLeft="94dp"
+        android:layout_marginTop="193dp"
+        android:layout_marginEnd="94dp"
+        android:layout_marginRight="94dp"
         android:gravity="center"
         android:text="@string/second_app_name_first"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
         fab:layout_constraintEnd_toEndOf="parent"
-        fab:layout_constraintHorizontal_bias="0.789"
         fab:layout_constraintStart_toStartOf="parent"
-        fab:layout_constraintTop_toBottomOf="@+id/image" />
+        fab:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/second_app_name"
@@ -51,16 +53,17 @@
         android:textStyle="bold"
         fab:layout_constraintBottom_toBottomOf="parent"
         fab:layout_constraintEnd_toEndOf="parent"
-        fab:layout_constraintRight_toRightOf="parent"
         fab:layout_constraintStart_toStartOf="parent"
         fab:layout_constraintTop_toBottomOf="@+id/second_name"
-        fab:layout_constraintVertical_bias="0.0" />
+        fab:layout_constraintVertical_bias="0.032" />
 
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/floating_menu"
         android:layout_width="140dp"
         android:layout_height="285dp"
         android:layout_gravity="bottom|end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginBottom="4dp"
         fab:fab_addButtonColorNormal="@color/background"
         fab:fab_addButtonPlusIconColor="#ffff"

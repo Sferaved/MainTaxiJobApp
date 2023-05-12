@@ -10,7 +10,7 @@ android {
         applicationId "com.taxieasyua.job"
         minSdk 16
         targetSdk 33
-        versionCode 506
+        versionCode 507
         versionName 'start page layout'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
