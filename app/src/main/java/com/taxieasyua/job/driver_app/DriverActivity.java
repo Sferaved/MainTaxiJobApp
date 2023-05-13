@@ -2,26 +2,14 @@ package com.taxieasyua.job.driver_app;
 
 import static com.taxieasyua.job.start.StartActivity.Auto_Info;
 import static com.taxieasyua.job.start.StartActivity.Driver_Info;
-import static com.taxieasyua.job.start.StartActivity.TABLE_AUTO_INFO;
-import static com.taxieasyua.job.start.StartActivity.TABLE_DRIVER_INFO;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.FragmentManager;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -43,13 +31,11 @@ import com.taxieasyua.job.start.StartActivity;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Exchanger;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -60,7 +46,6 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
     private List<String> autoList;
     private List<String> servicesList;
     private boolean valid;
-    private final int NOTIFICATION_ID = 127;
 
     private EmailValidator emailValidator;
     private PhoneValidator phoneValidator;
@@ -82,7 +67,6 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.driver_app_main_layout);
-
         infoFragment = new InfoFragment();
         autoFragment = new AutoFragment();
         try {
@@ -304,8 +288,12 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
                 }
 
                 URL url = new URL(autoSend.toString());
-                sendURL(url);
-                this.finish();
+                if(sendURL(url) == 200) {
+                    showNotification("Повідомлення відправлено. Зачекайте на відповідь оператора за телефоном або в месенджерах.");
+                    finish();
+                } else {
+                    showNotification("Немає зв'язку із сервером. Спробуйте пізніше.");
+                } ;
             }
         }
     }
@@ -334,108 +322,12 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, "До побачення. Чекаємо наступного разу.", Toast.LENGTH_SHORT).show();
+        showNotification("До побачення. Чекаємо наступного разу.");
+    }
+    public void showNotification(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
-    public void showNotification() {
-//        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-// The id of the channel.
-        String id = "my_channel_01";
-
-// The user-visible name of the channel.
-        CharSequence name = "channel_name";
-
-// The user-visible description of the channel.
-        String description = "channel_description";
-
-        int importance = NotificationManager.IMPORTANCE_LOW;
-
-        NotificationChannel mChannel = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            mChannel = new NotificationChannel(id, name,importance);
-        }
-
-// Configure the notification channel.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            mChannel.setDescription(description);
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            mChannel.enableLights(true);
-        }
-// Sets the notification light color for notifications posted to this
-// channel, if the device supports this feature.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            mChannel.setLightColor(Color.RED);
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            mChannel.enableVibration(true);
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            mNotificationManager.createNotificationChannel(mChannel);
-        }
-
-
-        Notification.Builder builder = new Notification.Builder(getApplicationContext());
-        int notifyID = 1;
-
-// The id of the channel.
-        String CHANNEL_ID = "my_channel_01";
-
-        Intent intent = new Intent(getApplicationContext(), StartActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            builder.setContentIntent(pendingIntent)
-                    .setSmallIcon(R.mipmap.ic_launcher_foreground)
-                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_foreground))
-                    .setTicker("Нове сповіщення")
-                    .setWhen(System.currentTimeMillis())
-                    .setChannelId(CHANNEL_ID)
-                    .setAutoCancel(true)
-                    .setContentTitle("Повідомлення надіслано адміністратору.")
-                    .setContentText("Очікуйте відповіді на електронну пошту або дзвінок.");
-        }
-
-        Notification notification = builder.build();
-
-
-        mNotificationManager.notify(NOTIFICATION_ID, notification);
-       this.finish();
-    }
-
-    public void showNotificationError(String message) {
-        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification.Builder builder = new Notification.Builder(getApplicationContext());
-
-        Intent intent = new Intent(getApplicationContext(), StartActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
-
-        builder.setContentIntent(pendingIntent)
-                .setSmallIcon(R.mipmap.ic_launcher_foreground)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_foreground))
-                .setTicker("New notification")
-                .setWhen(System.currentTimeMillis())
-                .setAutoCancel(true)
-                .setContentTitle("Сталася помилка.")
-                .setContentText(message);
-
-        Notification notification = builder.build();
-
-        long[] vibrate = {1500,1000, 1500, 1000};
-        notification.vibrate = vibrate;
-        notification.flags = notification.flags | Notification.FLAG_INSISTENT;
-        manager.notify(NOTIFICATION_ID, notification);
-        this.finish();
-    }
     @Override
     public void fragmentMailInfo(List<String> infoList) {
         this.infoList = infoList;
@@ -502,28 +394,37 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
         Toast.makeText(this, "Збережено: "  + autoList.get(0), Toast.LENGTH_SHORT).show();
     }
 
-    private void sendURL (URL url) {
+    private Integer sendURL (URL url) throws InterruptedException {
 
+        Exchanger<Integer> exchanger = new Exchanger<>();
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
                 HttpsURLConnection urlConnection = null;
                 try {
                     urlConnection = (HttpsURLConnection) url.openConnection();
-                    if(urlConnection.getResponseCode() == 200){
-                        showNotification();
-                    } else {
-                        showNotificationError("Немає зв'язку із сервером. Спробуйте пізніше.");
-                    }
+                    int message = urlConnection.getResponseCode();
+                    Log.d("TAG", "run message: " + message);
+                    exchanger.exchange(message);
                 } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
                 urlConnection.disconnect();
             }
         });
+        DriverActivity.ResultFromThread first = new DriverActivity.ResultFromThread(exchanger);
+        return first.message;
+    }
+    public static class ResultFromThread {
+        public Integer message;
+
+        public ResultFromThread(Exchanger<Integer> exchanger) throws InterruptedException {
+            this.message = exchanger.exchange(message);
+        }
 
     }
-
     public void onClickBigBtnSend(View view) {
         try {
             sendEmail();

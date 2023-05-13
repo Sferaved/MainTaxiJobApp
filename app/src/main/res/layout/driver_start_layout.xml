@@ -96,7 +96,7 @@
             fab:fab_colorNormal="@color/cardview_light_background"
             fab:fab_icon="@android:drawable/ic_menu_call"
             fab:fab_size="normal"
-            fab:fab_title="Оператор" />
+            fab:fab_title="Підтримка" />
 
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>

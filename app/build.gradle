@@ -10,8 +10,8 @@ android {
         applicationId "com.taxieasyua.job"
         minSdk 16
         targetSdk 33
-        versionCode 507
-        versionName 'start page layout'
+        versionCode 510
+        versionName 'fix notification'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

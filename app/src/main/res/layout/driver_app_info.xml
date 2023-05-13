@@ -5,6 +5,11 @@
     android:layout_height="wrap_content"
     android:background="@color/background">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        android:fillViewport="true">
     <TableLayout
         android:layout_marginTop="10sp"
         android:layout_marginLeft="10sp"
@@ -110,4 +115,5 @@
                 android:id="@+id/phone_number"/>
         </TableRow>
     </TableLayout>
+    </ScrollView>
 </LinearLayout>

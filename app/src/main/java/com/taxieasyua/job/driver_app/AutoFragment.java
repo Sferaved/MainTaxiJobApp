@@ -51,32 +51,32 @@ public class AutoFragment extends Fragment {
         numberAuto =  view.findViewById(R.id.number_auto);
 
         Auto_Info = logCursor(TABLE_AUTO_INFO);
-        if (Auto_Info.size() == 7) {
-
-            modelAuto.setText(Auto_Info.get(2));
-            colorAuto.setText(Auto_Info.get(4));
-            yearsAuto.setText(Auto_Info.get(5));
-            numberAuto.setText(Auto_Info.get(6));
-        };
 
         ArrayAdapter<String> adapterAutos = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_spinner_item, autos);
         Spinner spinnerAutos = view.findViewById(R.id.list_auto);
         spinnerAutos.setAdapter(adapterAutos);
         spinnerAutos.setPrompt("Title");
         int i;
+        Log.d("TAG", "onCreateView: Auto_Info.size():" + Auto_Info.size() + "autos.length" + autos.length);
         if (Auto_Info.size() == 7) {
+            modelAuto.setText(Auto_Info.get(2));
+            colorAuto.setText(Auto_Info.get(4));
+            yearsAuto.setText(Auto_Info.get(5));
+            numberAuto.setText(Auto_Info.get(6));
             for (i = 0; i < autos.length; i++) {
-                if(autos[i].equals(Auto_Info.get(1))) {
+                if (autos[i].equals(Auto_Info.get(1))) {
                     spinnerAutos.setSelection(i);
                     auto = autos[i];
+
                     break;
                 }
             }
-            if( i == autos.length-1){
-                spinnerAutos.setSelection(autos.length-1);
+
+            if (i == autos.length) {
+                spinnerAutos.setSelection(autos.length - 1);
             }
         } else
-                spinnerAutos.setSelection(0);
+            spinnerAutos.setSelection(0);
 
 
         spinnerAutos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -128,7 +128,14 @@ public class AutoFragment extends Fragment {
                 "Volkswagen",
                 "Ford",
                 "Hyundai",
-                "Audi",
+                "Renault",
+                "Skoda",
+                "Kia",
+                "Hyundai",
+                "Nissan",
+                "Chery",
+                "Mitsubishi",
+                "Suzuki",
                 "інше",};
     }
     private String[] types () {

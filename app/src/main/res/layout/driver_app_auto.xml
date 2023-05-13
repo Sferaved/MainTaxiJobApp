@@ -4,7 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/background">
-
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        android:fillViewport="true">
     <TableLayout
         android:layout_marginTop="10sp"
         android:layout_marginLeft="10sp"
@@ -103,10 +107,11 @@
                 android:textSize="20sp"
                 android:layout_width="282sp"
                 android:backgroundTint="@color/colorAccent"
-                android:inputType="number"
+                android:inputType="date"
                 android:text=""
                 android:textColor="@color/text"
                 android:id="@+id/years_auto"/>
+
         </TableRow>
         <TableRow>
             <TextView
@@ -129,5 +134,5 @@
         </TableRow>
 
     </TableLayout>
-
+    </ScrollView>
 </LinearLayout>
