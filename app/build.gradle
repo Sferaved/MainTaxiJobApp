@@ -10,7 +10,7 @@ android {
         applicationId "com.taxieasyua.job"
         minSdk 16
         targetSdk 33
-        versionCode 510
+        versionCode 511
         versionName 'fix notification'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

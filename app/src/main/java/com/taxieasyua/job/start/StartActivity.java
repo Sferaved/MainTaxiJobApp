@@ -53,11 +53,7 @@ public class StartActivity extends Activity {
 
         initDB();
 
-        if(!hasConnection()) {
-            Toast.makeText(this, "Перевірте інтернет-підключення або зателефонуйте оператору.", Toast.LENGTH_LONG).show();
-//            Intent setIntent = new Intent(Settings.ACTION_SETTINGS);
-//            startActivity(setIntent);
-        } else {
+
             final FloatingActionButton fabStart = findViewById(R.id.btn_1);
             final FloatingActionButton fabInfo = findViewById(R.id.btn_2);
             final FloatingActionButton fabAdmin = findViewById(R.id.btn_3);
@@ -128,8 +124,6 @@ public class StartActivity extends Activity {
                 startActivity(intent);
             });
 
-        }
-
     }
 
     public String verifyConnection (String urlString) throws MalformedURLException, InterruptedException {
@@ -193,8 +187,7 @@ public class StartActivity extends Activity {
         if (activeNetwork != null && activeNetwork.isConnected()) {
             return true;
         }
-        this.finish();
-        return false;
+       return false;
     }
 
     private void initDB(){
