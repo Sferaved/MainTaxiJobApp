@@ -9,6 +9,7 @@ import android.app.Dialog;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -42,8 +43,8 @@ import javax.net.ssl.HttpsURLConnection;
 public class DriverActivity extends AppCompatActivity implements Postman, ActionBar.TabListener, Dialog.OnClickListener  {
     private Driver driver;
     private Intent intent;
-    private List<String> infoList;
-    private List<String> autoList;
+    public static List<String> infoList;
+    public static List<String> autoList;
     private List<String> servicesList;
     private boolean valid;
 
@@ -195,6 +196,10 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
                 intent = new Intent(this, AboutActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.taxi:
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.taxi.easy.ua"));
+                startActivity(browserIntent);
+                break;
             case R.id.send_message:
                 try {
                     sendEmail();
@@ -234,8 +239,13 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
 
 
         if (!verifyComplete()) {
+//            finish();
+//            Intent intent = new Intent(this, DriverActivity.class);
+//            startActivity(intent);
             Toast.makeText(this, "Перед надсиланням перевірте всі поля Анкети.", Toast.LENGTH_SHORT).show();
-        } else if (isValid()) {
+        } else
+//            if (isValid())
+            {
 
             if(autoList.get(0).equals("інше")){
                 showDialog(DIALOG);
@@ -288,6 +298,7 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
                 }
 
                 URL url = new URL(autoSend.toString());
+                Log.d("TAG", "sendEmail: " + url);
                 if(sendURL(url) == 200) {
                     showNotification("Повідомлення відправлено. Зачекайте на відповідь оператора за телефоном або в месенджерах.");
                     finish();
@@ -301,15 +312,44 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
 
     private boolean verifyComplete() {
         infoComplete = true;
-        for (int i = 0; i < infoList.size(); i++) {
-            if (infoList.get(i).equals("") && i != 3) {
-                infoComplete = false;
-                break;
-            }
+        Log.d("TAG", "verifyComplete infoList: " + infoList.toString());
+//        for (int i = 0; i < infoList.size(); i++) {
+//            if (infoList.get(i).equals("")
+////                    && i != 3
+//            ) {
+//                infoComplete = false;
+//                break;
+//            }
+//        }
+        if (infoList.get(1).equals("")) {
+            infoComplete = false;
         }
-        if (infoList.get(3).equals("")) {
-            infoList.set(3, "відсутний");
+
+        if (infoList.get(4).equals("")) {
+            infoComplete = false;
         }
+        if (infoList.get(2).equals("")) {
+            infoList.set(2, "не вказав");
+        }if (infoList.get(3).equals("")) {
+            infoList.set(3, "не вказав");
+        }
+        if (autoList.get(1).equals("")) {
+            infoComplete = false;
+        }
+        if (autoList.get(3).equals("")) {
+            infoComplete = false;
+        }if (autoList.get(4).equals("")) {
+            infoComplete = false;
+        }
+        if (autoList.get(5).equals("")) {
+            infoComplete = false;
+        }
+
+//        if (infoList.get(3).equals("")) {
+//            infoList.set(3, "відсутний");
+//        }
+        Log.d("TAG", "verifyComplete autoList: " + autoList.toString());
+
         for (int i = 0; i < autoList.size(); i++) {
             if (autoList.get(i).equals("")) {
                 infoComplete = false;
@@ -322,7 +362,7 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        showNotification("До побачення. Чекаємо наступного разу.");
+//        showNotification("До побачення. Чекаємо наступного разу.");
     }
     public void showNotification(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
@@ -345,10 +385,10 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
     private boolean isValid() throws MalformedURLException, InterruptedException {
         valid = true;
 
-        if(!emailValidator.validate(infoList.get(3))){
-            valid = false;
-            Toast.makeText(this, "Перевірте формат вводу електронної пошти: " + infoList.get(3), Toast.LENGTH_SHORT).show();
-        };
+//        if(!emailValidator.validate(infoList.get(3))){
+//            valid = false;
+//            Toast.makeText(this, "Перевірте формат вводу електронної пошти: " + infoList.get(3), Toast.LENGTH_SHORT).show();
+//        };
 
 
             if(!phoneValidator.validate(infoList.get(4))){

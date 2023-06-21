@@ -2,6 +2,7 @@ package com.taxieasyua.job.driver_app;
 
 
 
+import static android.graphics.Color.RED;
 import static com.taxieasyua.job.start.StartActivity.Auto_Info;
 import static com.taxieasyua.job.start.StartActivity.Driver_Info;
 import static com.taxieasyua.job.start.StartActivity.TABLE_AUTO_INFO;
@@ -10,7 +11,9 @@ import static com.taxieasyua.job.start.StartActivity.logCursor;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -116,6 +119,30 @@ public class AutoFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (DriverActivity.autoList.get(1).equals("")) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                modelAuto.setBackgroundTintList(ColorStateList.valueOf(RED));
+            }
+        }
+        if (DriverActivity.autoList.get(3).equals("")) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                colorAuto.setBackgroundTintList(ColorStateList.valueOf(RED));
+            }
+        }if (DriverActivity.autoList.get(4).equals("")) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                yearsAuto.setBackgroundTintList(ColorStateList.valueOf(RED));
+            }
+        }
+        if (DriverActivity.autoList.get(5).equals("")) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                numberAuto.setBackgroundTintList(ColorStateList.valueOf(RED));
+            }
+        }
     }
 
     private String[] autos () {

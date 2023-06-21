@@ -15,18 +15,15 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-//import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.taxieasyua.job.R;
 import com.taxieasyua.job.about.AboutActivity;
 import com.taxieasyua.job.driver_app.DriverActivity;
-import com.taxieasyua.job.search3.Search3Activity;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,7 +37,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 
 public class StartActivity extends Activity {
-    private static final String DB_NAME = "DbQuest" ;
+    private static final String DB_NAME = "DbQuest123" ;
     public static final String TABLE_DRIVER_INFO = "driverInfo" ;
     public static final String TABLE_AUTO_INFO = "autoInfo" ;
     public static SQLiteDatabase database;
@@ -106,21 +103,8 @@ public class StartActivity extends Activity {
                 }
             });
             fabAdmin.setOnClickListener(view -> {
-                Intent intent = new Intent(Intent.ACTION_CALL);
+                Intent intent = new Intent(Intent.ACTION_DIAL);
                 intent.setData(Uri.parse("tel:0934066749"));
-                if (ActivityCompat.checkSelfPermission(StartActivity.this,
-                        Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(StartActivity.this, "Дозвольте застосунку отримати доступ у панелі налаштувань телефону та спробуйте ще.", Toast.LENGTH_LONG).show();
-//                    final Intent i = new Intent();
-//                    i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-//                    i.addCategory(Intent.CATEGORY_DEFAULT);
-//                    i.setData(Uri.parse("package:" + this.getPackageName()));
-//                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-//                    i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-//                    this.startActivity(i);
-                    return;
-                }
                 startActivity(intent);
             });
 

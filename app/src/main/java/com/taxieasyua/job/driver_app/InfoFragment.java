@@ -1,5 +1,6 @@
 package com.taxieasyua.job.driver_app;
 
+import static android.graphics.Color.RED;
 import static com.taxieasyua.job.start.StartActivity.Driver_Info;
 import static com.taxieasyua.job.start.StartActivity.TABLE_AUTO_INFO;
 import static com.taxieasyua.job.start.StartActivity.TABLE_DRIVER_INFO;
@@ -8,7 +9,10 @@ import static com.taxieasyua.job.start.StartActivity.logCursor;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -32,15 +36,16 @@ public class InfoFragment extends Fragment{
     EditText firstName;
     EditText secondName;
     EditText email;
-    EditText phoneNumber;
+    static EditText phoneNumber;
     Activity activity;
     public static String city;
+    View view;
 
     private String[] data = cities();
     public static final String TAG = "InfoFragment";
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.driver_app_info, container, false);
+        view = inflater.inflate(R.layout.driver_app_info, container, false);
         firstName = view.findViewById(R.id.first_name);
         secondName =  view.findViewById(R.id.second_name);
         email = view.findViewById(R.id.email);
@@ -48,12 +53,15 @@ public class InfoFragment extends Fragment{
 
         Driver_Info = logCursor(TABLE_DRIVER_INFO);
         if (Driver_Info.size() == 6) {
-            firstName.setText(StartActivity.Driver_Info.get(2));
-            secondName.setText(StartActivity.Driver_Info.get(3));
-            email.setText(StartActivity.Driver_Info.get(4));
-            phoneNumber.setText(StartActivity.Driver_Info.get(5));
+            firstName.setText(Driver_Info.get(2));
+            secondName.setText(Driver_Info.get(3));
+            email.setText(Driver_Info.get(4));
+            phoneNumber.setText(Driver_Info.get(5));
         };
-
+//        if (DriverActivity.infoList.get(4).equals("")) {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+//                phoneNumber.setBackgroundTintList(ColorStateList.valueOf(RED));
+//        }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_spinner_item, data);
 
         Spinner spinner = view.findViewById(R.id.list_cities);
@@ -63,7 +71,7 @@ public class InfoFragment extends Fragment{
         if (Driver_Info.size() == 6) {
             for (int i = 0; i < data.length; i++) {
 //                Log.d(TAG, "data[i].equals(StartActivity.Driver_Info.get(1): " + data[i].equals(StartActivity.Driver_Info.get(1)));
-                if(data[i].equals(StartActivity.Driver_Info.get(1))) {
+                if(data[i].equals(Driver_Info.get(1))) {
                     spinner.setSelection(i);
                     city = data[i];
                     break;
@@ -82,6 +90,22 @@ public class InfoFragment extends Fragment{
             }
         });
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+                    Log.d(TAG, "onAttach: " + DriverActivity.infoList.get(4));
+            if (DriverActivity.infoList.get(4).equals("") || DriverActivity.infoList.get(4).equals("+380")) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    phoneNumber.setBackgroundTintList(ColorStateList.valueOf(RED));
+                }
+            }
+            if (DriverActivity.infoList.get(1).equals("")) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    firstName.setBackgroundTintList(ColorStateList.valueOf(RED));
+                }
+            }
     }
 
     private String[] cities () {
@@ -117,6 +141,7 @@ public class InfoFragment extends Fragment{
         super.onAttach(context);
         if(context instanceof Activity) {
             activity = (Activity) context;
+
         }
     }
 

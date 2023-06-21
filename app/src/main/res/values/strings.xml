@@ -40,5 +40,6 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="version">Версія: 5.12</string>
+    <string name="version">Версія: 5.13</string>
+    <string name="taxi_app">Заказ доставки</string>
 </resources>
