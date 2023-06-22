@@ -52,6 +52,7 @@ public class InfoFragment extends Fragment{
         phoneNumber =  view.findViewById(R.id.phone_number);
 
         Driver_Info = logCursor(TABLE_DRIVER_INFO);
+        Log.d("TAG", "onCreateView Driver_Info: " + Driver_Info.toString() );
         if (Driver_Info.size() == 6) {
             firstName.setText(Driver_Info.get(2));
             secondName.setText(Driver_Info.get(3));

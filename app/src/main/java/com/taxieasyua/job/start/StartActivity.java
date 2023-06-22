@@ -37,7 +37,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 
 public class StartActivity extends Activity {
-    private static final String DB_NAME = "DbQuest123" ;
+    private static final String DB_NAME = "DbQuest123456" ;
     public static final String TABLE_DRIVER_INFO = "driverInfo" ;
     public static final String TABLE_AUTO_INFO = "autoInfo" ;
     public static SQLiteDatabase database;

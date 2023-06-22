@@ -1,4 +1,6 @@
 <resources>
+    <string name="version">Версія: 5.14</string>
+
     <string name="app_name">Анкета</string>
     <string name="main">На головну</string>
     <string name="friend">Порадити другові</string>
@@ -40,6 +42,8 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="version">Версія: 5.13</string>
     <string name="taxi_app">Заказ доставки</string>
+    <string name="cancel_button">Ні, дякую</string>
+    <string name="save_button">Зберегти</string>
+    <string name="another_brand">Вкажіть марку Вашого автомобіля:</string>
 </resources>

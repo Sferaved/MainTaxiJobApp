@@ -18,12 +18,15 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
 
 import com.taxieasyua.job.R;
 import com.taxieasyua.job.about.AboutActivity;
@@ -201,12 +204,16 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
                 startActivity(browserIntent);
                 break;
             case R.id.send_message:
-                try {
-                    sendEmail();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                if(autoList.get(0).equals("інше")){
+                    showDialog(DIALOG);
+                } else {
+                    try {
+                        sendEmail();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
                 break;
             case R.id.exit:
@@ -246,11 +253,8 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
         } else
 //            if (isValid())
             {
+                Log.d("TAG", "sendEmail: " + autoList.get(0));
 
-            if(autoList.get(0).equals("інше")){
-                showDialog(DIALOG);
-                infoComplete = true;
-            } else {
                 StringBuilder serviceSend = new StringBuilder();
                 for (String value :servicesList) {
                     serviceSend.append(value);
@@ -305,7 +309,7 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
                 } else {
                     showNotification("Немає зв'язку із сервером. Спробуйте пізніше.");
                 } ;
-            }
+
         }
     }
 
@@ -313,14 +317,7 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
     private boolean verifyComplete() {
         infoComplete = true;
         Log.d("TAG", "verifyComplete infoList: " + infoList.toString());
-//        for (int i = 0; i < infoList.size(); i++) {
-//            if (infoList.get(i).equals("")
-////                    && i != 3
-//            ) {
-//                infoComplete = false;
-//                break;
-//            }
-//        }
+
         if (infoList.get(1).equals("")) {
             infoComplete = false;
         }
@@ -330,9 +327,12 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
         }
         if (infoList.get(2).equals("")) {
             infoList.set(2, "не вказав");
-        }if (infoList.get(3).equals("")) {
+        }
+        if (infoList.get(3).equals("")) {
             infoList.set(3, "не вказав");
         }
+
+
         if (autoList.get(1).equals("")) {
             infoComplete = false;
         }
@@ -344,11 +344,6 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
         if (autoList.get(5).equals("")) {
             infoComplete = false;
         }
-
-//        if (infoList.get(3).equals("")) {
-//            infoList.set(3, "відсутний");
-//        }
-        Log.d("TAG", "verifyComplete autoList: " + autoList.toString());
 
         for (int i = 0; i < autoList.size(); i++) {
             if (autoList.get(i).equals("")) {
@@ -415,8 +410,7 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
         View view = getLayoutInflater().inflate(R.layout.auto_dialog_layout, null);
         builder.setTitle("Вкажіть марку Вашого автомобіля:")
                 .setView(view)
-                .setPositiveButton( "Зберегти", this)
-                .setNegativeButton("Скасувати", null);
+                .setPositiveButton( "Зберегти", this);
         return builder.create();
     }
 
@@ -432,6 +426,13 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
     public void onClick(DialogInterface dialog, int which) {
         autoList.set(0, nameTxt.getText().toString());
         Toast.makeText(this, "Збережено: "  + autoList.get(0), Toast.LENGTH_SHORT).show();
+        try {
+            sendEmail();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private Integer sendURL (URL url) throws InterruptedException {
@@ -466,13 +467,18 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
 
     }
     public void onClickBigBtnSend(View view) {
-        try {
-            sendEmail();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        if(autoList.get(0).equals("інше")){
+            showDialog(DIALOG);
+        } else {
+            try {
+                sendEmail();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
+
     }
 
 
