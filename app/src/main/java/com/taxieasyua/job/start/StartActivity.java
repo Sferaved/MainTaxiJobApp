@@ -54,6 +54,7 @@ public class StartActivity extends Activity {
             final FloatingActionButton fabStart = findViewById(R.id.btn_1);
             final FloatingActionButton fabInfo = findViewById(R.id.btn_2);
             final FloatingActionButton fabAdmin = findViewById(R.id.btn_3);
+            final FloatingActionButton fabOrder = findViewById(R.id.btn_4);
             fabStart.setOnClickListener(view -> {
                 if(!hasConnection()) {
                     Toast.makeText(StartActivity.this, "Перевірте інтернет-підключення або зателефонуйте оператору.", Toast.LENGTH_LONG).show();
@@ -105,6 +106,12 @@ public class StartActivity extends Activity {
             fabAdmin.setOnClickListener(view -> {
                 Intent intent = new Intent(Intent.ACTION_DIAL);
                 intent.setData(Uri.parse("tel:0934066749"));
+                startActivity(intent);
+            });
+            fabOrder.setOnClickListener(view -> {
+                String url = "https://play.google.com/store/apps/details?id=com.taxi.easy.ua";
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url));
                 startActivity(intent);
             });
 

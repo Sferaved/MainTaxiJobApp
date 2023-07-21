@@ -98,6 +98,15 @@
             fab:fab_size="normal"
             fab:fab_title="Підтримка" />
 
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btn_4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            fab:fab_colorNormal="@color/cardview_light_background"
+            fab:fab_icon="@android:drawable/ic_menu_gallery"
+            fab:fab_size="normal"
+            fab:fab_title="Замовлення" />
+
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 </android.support.constraint.ConstraintLayout>
