@@ -141,9 +141,17 @@ public class StartActivity extends Activity {
                     exchanger.exchange("400");
                 }
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                try {
+                    exchanger.exchange("400");
+                } catch (InterruptedException ignored) {
+
+                }
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                try {
+                    exchanger.exchange("400");
+                } catch (InterruptedException ignored) {
+
+                }
             }
             urlConnection.disconnect();
         });
@@ -219,7 +227,7 @@ public class StartActivity extends Activity {
 
            statement.execute();
            database.setTransactionSuccessful();
-            logCursor(TABLE_DRIVER_INFO);
+//            logCursor(TABLE_DRIVER_INFO);
         } finally {
             database.endTransaction();
         }

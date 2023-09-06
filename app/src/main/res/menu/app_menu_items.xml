@@ -5,9 +5,9 @@
     <item
         android:id="@+id/send_message"
         android:orderInCategory="1"
-        android:icon="@android:drawable/ic_menu_send"
+      
         app:showAsAction="always"
-        android:title="TODO" />
+        android:title="Відправити" />
     <item
         android:id="@+id/exit"
         android:orderInCategory="1"
