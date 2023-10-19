@@ -1,18 +1,18 @@
 package com.taxieasyua.job.driver_app;
 
 
-
+import static android.content.Context.MODE_PRIVATE;
 import static android.graphics.Color.RED;
 import static com.taxieasyua.job.start.StartActivity.Auto_Info;
-import static com.taxieasyua.job.start.StartActivity.Driver_Info;
 import static com.taxieasyua.job.start.StartActivity.TABLE_AUTO_INFO;
-import static com.taxieasyua.job.start.StartActivity.logCursor;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,7 +25,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-
 
 import com.taxieasyua.job.R;
 import com.taxieasyua.job.start.StartActivity;
@@ -204,5 +203,29 @@ public class AutoFragment extends Fragment {
         } catch (ClassCastException ignored) {}
 
     }
+    @SuppressLint("Range")
+    private List<String> logCursor(String table) {
+        List<String> list = new ArrayList<>();
+        @SuppressLint({"NewApi", "LocalSuppress"}) SQLiteDatabase database = getContext().openOrCreateDatabase( StartActivity.DB_NAME , MODE_PRIVATE , null );
+        Cursor c = database.query(table, null, null, null, null, null, null);
+        if (c != null) {
+            if (c.moveToFirst()) {
+                String str;
+                do {
+                    str = "";
+                    for (String cn : c.getColumnNames()) {
+                        str = str.concat(cn + " = " + c.getString(c.getColumnIndex(cn)) + "; ");
+                        list.add(c.getString(c.getColumnIndex(cn)));
 
+                    }
+
+                } while (c.moveToNext());
+            }
+        }
+        if (c != null) {
+            c.close();
+        }
+        database.close();
+        return list;
+    }
 }

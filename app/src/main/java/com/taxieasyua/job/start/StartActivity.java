@@ -37,7 +37,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 
 public class StartActivity extends Activity {
-    private static final String DB_NAME = "DbQuest123456" ;
+    public static final String DB_NAME = "DbQuest123456" ;
     public static final String TABLE_DRIVER_INFO = "driverInfo" ;
     public static final String TABLE_AUTO_INFO = "autoInfo" ;
     public static SQLiteDatabase database;
@@ -289,8 +289,9 @@ public class StartActivity extends Activity {
         Log.d("TAG", "updated rows count = " + updCount);
     }
     @SuppressLint("Range")
-    public static List<String> logCursor(String table) {
+    private List<String> logCursor(String table) {
         List<String> list = new ArrayList<>();
+        SQLiteDatabase database = openOrCreateDatabase( DB_NAME , MODE_PRIVATE , null );
         Cursor c = database.query(table, null, null, null, null, null, null);
         if (c != null) {
             if (c.moveToFirst()) {
@@ -306,6 +307,10 @@ public class StartActivity extends Activity {
                 } while (c.moveToNext());
             }
         }
+        if (c != null) {
+            c.close();
+        }
+        database.close();
         return list;
     }
 

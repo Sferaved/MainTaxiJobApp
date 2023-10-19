@@ -1,16 +1,17 @@
 package com.taxieasyua.job.driver_app;
 
+import static android.content.Context.MODE_PRIVATE;
 import static android.graphics.Color.RED;
 import static com.taxieasyua.job.start.StartActivity.Driver_Info;
-import static com.taxieasyua.job.start.StartActivity.TABLE_AUTO_INFO;
 import static com.taxieasyua.job.start.StartActivity.TABLE_DRIVER_INFO;
-import static com.taxieasyua.job.start.StartActivity.logCursor;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -93,6 +94,31 @@ public class InfoFragment extends Fragment{
         return view;
     }
 
+    @SuppressLint("Range")
+    private List<String> logCursor(String table) {
+        List<String> list = new ArrayList<>();
+        @SuppressLint({"NewApi", "LocalSuppress"}) SQLiteDatabase database = getContext().openOrCreateDatabase( StartActivity.DB_NAME , MODE_PRIVATE , null );
+        Cursor c = database.query(table, null, null, null, null, null, null);
+        if (c != null) {
+            if (c.moveToFirst()) {
+                String str;
+                do {
+                    str = "";
+                    for (String cn : c.getColumnNames()) {
+                        str = str.concat(cn + " = " + c.getString(c.getColumnIndex(cn)) + "; ");
+                        list.add(c.getString(c.getColumnIndex(cn)));
+
+                    }
+
+                } while (c.moveToNext());
+            }
+        }
+        if (c != null) {
+            c.close();
+        }
+        database.close();
+        return list;
+    }
     @Override
     public void onResume() {
         super.onResume();
