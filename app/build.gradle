@@ -10,8 +10,8 @@ android {
         applicationId "com.taxieasyua.job"
         minSdk 16
         targetSdk 33
-        versionCode 5143
-        versionName '5.143'
+        versionCode 5144
+        versionName '5.144'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -47,5 +47,12 @@ dependencies {
 
     implementation 'com.melnykov:floatingactionbutton:1.3.0'
     implementation 'com.getbase:floatingactionbutton:1.10.1'
+
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    //noinspection GradleCompatible
+    implementation 'com.android.support:support-compat:28.0.0'
+
+
 
 }

@@ -3,9 +3,15 @@ package com.taxieasyua.job.start;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AppOpsManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,42 +20,63 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
 import com.taxieasyua.job.R;
 import com.taxieasyua.job.about.AboutActivity;
 import com.taxieasyua.job.driver_app.DriverActivity;
+import com.taxieasyua.job.start.verify.ApiService;
+import com.taxieasyua.job.start.verify.ResponseModel;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Exchanger;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class StartActivity extends Activity {
     public static final String DB_NAME = "DbQuest123456" ;
     public static final String TABLE_DRIVER_INFO = "driverInfo" ;
     public static final String TABLE_AUTO_INFO = "autoInfo" ;
+    private static final String TAG = "TAG_START";
     public static SQLiteDatabase database;
     public static List<String>  Driver_Info, Auto_Info;
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.driver_start_layout);
 
         initDB();
-
+        verifyUser();
 
             final FloatingActionButton fabStart = findViewById(R.id.btn_1);
             final FloatingActionButton fabInfo = findViewById(R.id.btn_2);
@@ -288,30 +315,88 @@ public class StartActivity extends Activity {
                 new String[] { "1" });
         Log.d("TAG", "updated rows count = " + updCount);
     }
-    @SuppressLint("Range")
-    private List<String> logCursor(String table) {
-        List<String> list = new ArrayList<>();
-        SQLiteDatabase database = openOrCreateDatabase( DB_NAME , MODE_PRIVATE , null );
-        Cursor c = database.query(table, null, null, null, null, null, null);
-        if (c != null) {
-            if (c.moveToFirst()) {
-                String str;
-                do {
-                    str = "";
-                    for (String cn : c.getColumnNames()) {
-                        str = str.concat(cn + " = " + c.getString(c.getColumnIndex(cn)) + "; ");
-                        list.add(c.getString(c.getColumnIndex(cn)));
+
+    private void verifyUser() {
+        String userEmail = "email@email.com";
+
+
+        String application = getResources().getString(R.string.application);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://m.easy-order-taxi.site/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        Log.d(TAG, "verifyUser: ");
+        ApiService apiService = retrofit.create(ApiService.class);
+
+        Call<ResponseModel> call = apiService.verifyUser(userEmail, application);
+
+        call.enqueue(new Callback<ResponseModel>() {
+            @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+            @Override
+            public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
+
+                if (response.isSuccessful()) {
+                    ResponseModel result = response.body();
+                    if (result != null) {
+                        String message = result.getMessage();
+                        Log.d(TAG, "onResponse: " + message);
+                        try {
+                            version(message);
+                        } catch (MalformedURLException e) {
+                            throw new RuntimeException(e);
+                        }
 
                     }
-
-                } while (c.moveToNext());
+                } else {
+                    // Обработка ошибки
+                    // Вы можете получить детали ошибки из response.errorBody()
+                }
             }
-        }
-        if (c != null) {
-            c.close();
-        }
-        database.close();
-        return list;
+
+            @Override
+            public void onFailure(Call<ResponseModel> call, Throwable t) {
+                // Обработка ошибки сети или другие ошибки
+                Log.d("TAG", "onFailure: Ошибка сети: " + t.getMessage());
+            }
+        });
     }
 
+
+
+    private static final String PREFS_NAME = "MyPrefsFile1";
+    private static final String LAST_NOTIFICATION_TIME_KEY = "lastNotificationTime1";
+    //    private static final long ONE_DAY_IN_MILLISECONDS = 0; // 24 часа в миллисекундах
+    private static final long ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000; // 24 часа в миллисекундах
+//    private static final long ONE_DAY_IN_MILLISECONDS = 10000; // 24 часа в миллисекундах
+
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    private void version(String versionApi) throws MalformedURLException {
+        // Получаем SharedPreferences
+        SharedPreferences SharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+
+        // Получаем время последней отправки уведомления
+        long lastNotificationTime = SharedPreferences.getLong(LAST_NOTIFICATION_TIME_KEY, 0);
+
+        // Получаем текущее время
+        long currentTime = System.currentTimeMillis();
+        boolean versTime = currentTime - lastNotificationTime >= ONE_DAY_IN_MILLISECONDS;
+        Log.d(TAG, "version:versTime " + versTime);
+        Log.d(TAG, "version:versionApi " + versionApi);
+        // Проверяем, прошло ли уже 24 часа с момента последней отправки
+        if (currentTime - lastNotificationTime >= ONE_DAY_IN_MILLISECONDS) {
+            if (!versionApi.equals(getString(R.string.version_code))) {
+                NotificationHelper notificationHelper = new NotificationHelper();
+                String title = getString(R.string.new_version);
+                String messageNotif = getString(R.string.news_of_version);
+                String urlStr = "https://play.google.com/store/apps/details?id=com.taxieasyua.job";
+                notificationHelper.showNotification(this, title, messageNotif, urlStr);
+
+                // Обновляем время последней отправки уведомления
+                SharedPreferences.Editor editor = SharedPreferences.edit();
+                editor.putLong(LAST_NOTIFICATION_TIME_KEY, currentTime);
+                editor.apply();
+            }
+        }
+    }
 }

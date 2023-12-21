@@ -1,5 +1,8 @@
 <resources>
-    <string name="version">Версія: 5.143</string>
+    <string name="application">PAS5</string>
+
+    <string name="version_code">5.144</string>
+    <string name="version">Версія: 5.144</string>
 
     <string name="app_name">Анкета</string>
     <string name="main">На головну</string>
@@ -46,4 +49,13 @@
     <string name="cancel_button">Ні, дякую</string>
     <string name="save_button">Зберегти</string>
     <string name="another_brand">Вкажіть марку Вашого автомобіля:</string>
+
+    <string name="update_url">Оновити додаток</string>
+    <string name="new_version">Доступна нова версія</string>
+    <string name="news_of_version">У новій версії покращено продуктивність та додано нові зручні функції</string>
+    <string name="enable_notifications">Увімкнути сповіщення</string>
+    <string name="to_receive_updates_please_enable_notifications_for_this_app">Щоб отримувати оновлення, увімкніть сповіщення для цієї програми.</string>
+    <string name="ok">ОК</string>
+    <string name="cancel">Скасувати</string>
+
 </resources>

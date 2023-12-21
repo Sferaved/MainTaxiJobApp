@@ -203,19 +203,7 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.taxi.easy.ua"));
                 startActivity(browserIntent);
                 break;
-            case R.id.send_message:
-                if(autoList.get(0).equals("інше")){
-                    showDialog(DIALOG);
-                } else {
-                    try {
-                        sendEmail();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                break;
+
             case R.id.exit:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -227,10 +215,8 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
                             Toast.makeText(DriverActivity.this, "Продовжуйте заповнення анкети", Toast.LENGTH_SHORT).show();
                         }))
                         .setPositiveButton("Так", ((dialog, which) -> {
-                            finish();
                             StartActivity.database.close();
-                            Intent intent = new Intent(this, StartActivity.class);
-                            startActivity(intent);
+                            finishAffinity();
                         }));
                 AlertDialog dialog = builder.create();
                 dialog.show();
@@ -246,12 +232,9 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
 
 
         if (!verifyComplete()) {
-//            finish();
-//            Intent intent = new Intent(this, DriverActivity.class);
-//            startActivity(intent);
+
             Toast.makeText(this, "Перед надсиланням перевірте всі поля Анкети.", Toast.LENGTH_SHORT).show();
         } else
-//            if (isValid())
             {
                 Log.d("TAG", "sendEmail: " + autoList.get(0));
 
@@ -305,10 +288,10 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
                 Log.d("TAG", "sendEmail: " + url);
                 if(sendURL(url) == 200) {
                     showNotification("Повідомлення відправлено. Зачекайте на відповідь оператора за телефоном або в месенджерах.");
-                    finish();
+                    startActivity(new Intent(this, StartActivity.class));
                 } else {
                     showNotification("Немає зв'язку із сервером. Спробуйте пізніше.");
-                } ;
+                }
 
         }
     }
@@ -374,34 +357,6 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
     @Override
     public void fragmentMailService(List<String> servicesList) {
         this.servicesList = servicesList;
-    }
-
-
-    private boolean isValid() throws MalformedURLException, InterruptedException {
-        valid = true;
-
-//        if(!emailValidator.validate(infoList.get(3))){
-//            valid = false;
-//            Toast.makeText(this, "Перевірте формат вводу електронної пошти: " + infoList.get(3), Toast.LENGTH_SHORT).show();
-//        };
-
-
-            if(!phoneValidator.validate(infoList.get(4))){
-                valid = false;
-                Toast.makeText(this, "Формат вводу номера телефону: +380936665544", Toast.LENGTH_SHORT).show();
-            } else if(!autoList.get(0).equals("інше")){
-                String urlString = "https://m.easy-order-taxi.site/api/driverAuto/sendCode/" + infoList.get(4);
-
-//                if(phoneValidator.sendCode(urlString).equals("200")) {
-//                    Toast.makeText(this, "На Ваш телефон надіслано код перевірки номера.", Toast.LENGTH_LONG).show();
-//                } else {
-//                    Toast.makeText(this, "Помілка відправлення коду перевірки номера.", Toast.LENGTH_SHORT).show();
-//                }
-            }
-
-
-
-        return valid;
     }
 
     @Override
