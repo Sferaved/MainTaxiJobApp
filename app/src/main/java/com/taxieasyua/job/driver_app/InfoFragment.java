@@ -17,6 +17,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InfoFragment extends Fragment{
-    EditText firstName;
+    static EditText firstName;
     EditText secondName;
     EditText email;
     static EditText phoneNumber;
@@ -51,6 +53,31 @@ public class InfoFragment extends Fragment{
         secondName =  view.findViewById(R.id.second_name);
         email = view.findViewById(R.id.email);
         phoneNumber =  view.findViewById(R.id.phone_number);
+        phoneNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @SuppressLint("ResourceAsColor")
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!DriverActivity.isValidPhoneNumber(InfoFragment.phoneNumber.getText().toString())) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        phoneNumber.setBackgroundTintList(ColorStateList.valueOf(RED));
+                    }
+                } else {
+                    // If the entered phone number is valid, you might want to reset the background tint
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        phoneNumber.setBackgroundTintList(ColorStateList.valueOf(R.color.colorAccent));
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         Driver_Info = logCursor(TABLE_DRIVER_INFO);
         Log.d("TAG", "onCreateView Driver_Info: " + Driver_Info.toString() );
@@ -123,12 +150,12 @@ public class InfoFragment extends Fragment{
     public void onResume() {
         super.onResume();
                     Log.d(TAG, "onAttach: " + DriverActivity.infoList.get(4));
-            if (DriverActivity.infoList.get(4).equals("") || DriverActivity.infoList.get(4).equals("+380")) {
+            if (!DriverActivity.isValidPhoneNumber(InfoFragment.phoneNumber.getText().toString())) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     phoneNumber.setBackgroundTintList(ColorStateList.valueOf(RED));
                 }
             }
-            if (DriverActivity.infoList.get(1).equals("")) {
+            if (firstName.getText().toString().equals("")) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     firstName.setBackgroundTintList(ColorStateList.valueOf(RED));
                 }

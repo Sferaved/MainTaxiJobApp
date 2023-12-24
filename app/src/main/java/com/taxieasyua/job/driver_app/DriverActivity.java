@@ -1,5 +1,6 @@
 package com.taxieasyua.job.driver_app;
 
+import static android.graphics.Color.RED;
 import static com.taxieasyua.job.start.StartActivity.Auto_Info;
 import static com.taxieasyua.job.start.StartActivity.Driver_Info;
 
@@ -9,8 +10,10 @@ import android.app.Dialog;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +67,7 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
     private final int DIALOG = 1;
     private EditText nameTxt;
     private Button bigBtnSend;
+    public static ProgressBar progressBar;
 
 
 
@@ -84,6 +89,7 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
         }
 
         bigBtnSend = findViewById(R.id.big_btn_send);
+        progressBar = findViewById(R.id.progressBar);
 
         infoList = initArray(5);
         autoList = initArray(6);
@@ -230,72 +236,76 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
     protected void sendEmail() throws IOException, InterruptedException {
         pauseFragment();
 
+        if (verifyComplete())  {
+            Log.d("TAG", "sendEmail: " + autoList.get(0));
 
-        if (!verifyComplete()) {
+            StringBuilder serviceSend = new StringBuilder();
+            for (String value :servicesList) {
+                serviceSend.append(value);
+                serviceSend.append("*");
+            }
 
-            Toast.makeText(this, "Перед надсиланням перевірте всі поля Анкети.", Toast.LENGTH_SHORT).show();
-        } else
-            {
-                Log.d("TAG", "sendEmail: " + autoList.get(0));
+            String autoSend = "https://m.easy-order-taxi.site/api/driverAuto" +
+                    "/" +
+                    infoList.get(0) +
+                    "/" +
+                    infoList.get(1) +
+                    "/" +
+                    infoList.get(2) +
+                    "/" +
+                    infoList.get(3) +
+                    "/" +
+                    infoList.get(4) +
+                    "/" +
+                    autoList.get(0) +
+                    "/" +
+                    autoList.get(1) +
+                    "/" +
+                    autoList.get(2) +
+                    "/" +
+                    autoList.get(3) +
+                    "/" +
+                    autoList.get(4) +
+                    "/" +
+                    autoList.get(5) +
+                    "/" +
+                    serviceSend;
 
-                StringBuilder serviceSend = new StringBuilder();
-                for (String value :servicesList) {
-                    serviceSend.append(value);
-                    serviceSend.append("*");
-                }
+            if (Driver_Info.size() == 0) {
+                StartActivity.insertRecordsDriver(infoList);
+            } else {
+                StartActivity.updateRecordsDriver(infoList);
+            }
 
-                StringBuilder autoSend = new StringBuilder();
-                autoSend
-                        .append("https://m.easy-order-taxi.site/api/driverAuto")
-                        .append("/")
-                        .append(infoList.get(0))
-                        .append("/")
-                        .append(infoList.get(1))
-                        .append("/")
-                        .append(infoList.get(2))
-                        .append("/")
-                        .append(infoList.get(3))
-                        .append("/")
-                        .append(infoList.get(4))
-                        .append("/")
-                        .append(autoList.get(0))
-                        .append("/")
-                        .append(autoList.get(1))
-                        .append("/")
-                        .append(autoList.get(2))
-                        .append("/")
-                        .append(autoList.get(3))
-                        .append("/")
-                        .append(autoList.get(4))
-                        .append("/")
-                        .append(autoList.get(5))
-                        .append("/")
-                        .append(serviceSend);
+            if (Auto_Info.size() == 0) {
+                StartActivity.insertRecordsAuto(autoList);
+            } else {
+                StartActivity.updateRecordsAuto(autoList);
+            }
 
-                if (Driver_Info.size() == 0) {
-                     StartActivity.insertRecordsDriver(infoList);
-                } else {
-                    StartActivity.updateRecordsDriver(infoList);
-                }
-
-                if (Auto_Info.size() == 0) {
-                    StartActivity.insertRecordsAuto(autoList);
-                } else {
-                    StartActivity.updateRecordsAuto(autoList);
-                }
-
-                URL url = new URL(autoSend.toString());
-                Log.d("TAG", "sendEmail: " + url);
-                if(sendURL(url) == 200) {
-                    showNotification("Повідомлення відправлено. Зачекайте на відповідь оператора за телефоном або в месенджерах.");
-                    startActivity(new Intent(this, StartActivity.class));
-                } else {
-                    showNotification("Немає зв'язку із сервером. Спробуйте пізніше.");
-                }
+            URL url = new URL(autoSend);
+            Log.d("TAG", "sendEmail: " + url);
+            if(sendURL(url) == 200) {
+                bigBtnSend.setEnabled(false);
+                showNotification("Повідомлення відправлено. Зачекайте на відповідь оператора за телефоном або в месенджерах.");
+                startActivity(new Intent(this, StartActivity.class));
+            } else {
+                showNotification("Немає зв'язку із сервером. Спробуйте пізніше.");
+            }
 
         }
+        else {
+            Toast.makeText(this, "Перед надсиланням перевірте всі поля Анкети.", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        bigBtnSend.setEnabled(true);
+        progressBar.setVisibility(View.GONE);
+    }
 
     private boolean verifyComplete() {
         infoComplete = true;
@@ -333,10 +343,49 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
                 infoComplete = false;
                 break;}
         }
+
+        if (AutoFragment.modelAuto != null && AutoFragment.modelAuto.getText().toString().equals("")) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                AutoFragment.modelAuto.setBackgroundTintList(ColorStateList.valueOf(RED));
+            }
+        }
+        if (AutoFragment.colorAuto != null && AutoFragment.colorAuto.getText().equals("")) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                AutoFragment.colorAuto.setBackgroundTintList(ColorStateList.valueOf(RED));
+            }
+        }
+
+        if (AutoFragment.yearsAuto != null && AutoFragment.yearsAuto.getText().equals("")) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                AutoFragment.yearsAuto.setBackgroundTintList(ColorStateList.valueOf(RED));
+            }
+        }
+        if (AutoFragment.numberAuto != null && AutoFragment.numberAuto.getText().equals("")) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                AutoFragment.numberAuto.setBackgroundTintList(ColorStateList.valueOf(RED));
+            }
+        }
+
+
+        if (!isValidPhoneNumber(InfoFragment.phoneNumber.getText().toString())) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                InfoFragment.phoneNumber.setBackgroundTintList(ColorStateList.valueOf(RED));
+            }
+        }
+        if (InfoFragment.firstName.getText().toString().equals("")) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                InfoFragment.firstName.setBackgroundTintList(ColorStateList.valueOf(RED));
+            }
+        }
+
+
         return infoComplete;
     }
 
-
+    public static boolean isValidPhoneNumber(String phoneNumber) {
+        String regex = "^\\+380\\d{9}$";
+        return phoneNumber.matches(regex);
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -380,6 +429,7 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
     @Override
     public void onClick(DialogInterface dialog, int which) {
         autoList.set(0, nameTxt.getText().toString());
+        progressBar.setVisibility(View.VISIBLE);
         Toast.makeText(this, "Збережено: "  + autoList.get(0), Toast.LENGTH_SHORT).show();
         try {
             sendEmail();
@@ -422,18 +472,21 @@ public class DriverActivity extends AppCompatActivity implements Postman, Action
 
     }
     public void onClickBigBtnSend(View view) {
-        if(autoList.get(0).equals("інше")){
-            showDialog(DIALOG);
-        } else {
-            try {
-                sendEmail();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+        progressBar.setVisibility(View.VISIBLE);
+        if(InfoFragment.phoneNumber != null && isValidPhoneNumber(InfoFragment.phoneNumber.getText().toString())) {
+            if(autoList.get(0).equals("інше")){
+                showDialog(DIALOG);
+            } else {
+                try {
+                    sendEmail();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
             }
         }
-
     }
 
 

@@ -17,6 +17,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,16 +36,17 @@ import java.util.List;
 
 
 public class AutoFragment extends Fragment {
-    EditText modelAuto;
-    EditText colorAuto;
-    EditText yearsAuto;
-    EditText numberAuto;
+    public static EditText modelAuto;
+    public static EditText colorAuto;
+    public static EditText yearsAuto;
+    public static EditText numberAuto;
     private String[] autos = autos();
     private String[] types = types();
     Activity activity;
 
     public static String auto, type_auto;
     public static final String TAG = "AutoFragment";
+    @SuppressLint("ResourceAsColor")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.driver_app_auto, container, false);
@@ -123,21 +126,22 @@ public class AutoFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (DriverActivity.autoList.get(1).equals("")) {
+
+        if (modelAuto.getText().toString().equals("")) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 modelAuto.setBackgroundTintList(ColorStateList.valueOf(RED));
             }
         }
-        if (DriverActivity.autoList.get(3).equals("")) {
+        if (colorAuto.getText().toString().equals("")) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 colorAuto.setBackgroundTintList(ColorStateList.valueOf(RED));
             }
-        }if (DriverActivity.autoList.get(4).equals("")) {
+        }if (yearsAuto.getText().toString().equals("")) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 yearsAuto.setBackgroundTintList(ColorStateList.valueOf(RED));
             }
         }
-        if (DriverActivity.autoList.get(5).equals("")) {
+        if (numberAuto.getText().toString().equals("")) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 numberAuto.setBackgroundTintList(ColorStateList.valueOf(RED));
             }
