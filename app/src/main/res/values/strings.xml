@@ -1,8 +1,8 @@
 <resources>
     <string name="application">PAS5</string>
 
-    <string name="version_code">5.145</string>
-    <string name="version">Версія: 5.145</string>
+    <string name="version_code">5.146</string>
+    <string name="version">Версія: 5.146</string>
 
     <string name="app_name">Анкета</string>
     <string name="main">На головну</string>

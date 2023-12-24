@@ -21,21 +21,30 @@ public class NotificationHelper {
     public void showNotification(Context context, String title, String message, String url) {
         createNotificationChannel(context);
 
-        // Интент для открытия URL-адреса при нажатии на уведомление
         Uri webpage = Uri.parse(url);
+
+        // Используйте PendingIntent.FLAG_IMMUTABLE
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                context,
+                0,
+                new Intent(Intent.ACTION_VIEW, webpage),
+                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
+        );
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setContentTitle(title)
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(Intent.ACTION_VIEW, webpage), 0));
+                .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (notificationManager != null) {
             notificationManager.notify(0, builder.build());
         }
     }
+
 
     private void createNotificationChannel(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
